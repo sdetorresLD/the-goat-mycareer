@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MyCareer - The GOAT</title>
+<style>
+:root{
+  --bg:#0b0c0e; --panel:#141517; --panel-dark:#101113; --line:#26282c; --line-soft:#1e2023;
+  --text:#f2f3f5; --muted:#9a9ea6; --seg:#2a2c30; --accent:#ff7a1a; --danger:#ff6b6b; --ok:#4cd08a;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--text)}
+
+/* ---------- HOME ---------- */
+#home{position:relative;height:100%;display:flex;flex-direction:column;align-items:center}
+.court{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.court *{fill:none;stroke:var(--accent);stroke-opacity:.14;stroke-width:2}
+.topnav{position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 30px;padding:26px 16px 0}
+.topnav button{background:none;border:0;padding:8px 2px;color:var(--muted);font-size:17px;font-weight:600;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.topnav button:hover{color:var(--text);border-bottom-color:var(--accent)}
+.hero{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 20px 60px}
+.hero h1{margin:0;font-size:clamp(56px,13vw,132px);line-height:.95;font-weight:800;letter-spacing:-.045em}
+.hero .sub{margin:14px 0 46px;font-size:clamp(20px,3vw,30px);font-weight:600;color:var(--muted);letter-spacing:.02em}
+.btn-primary{display:block;width:100%;background:#f1f2f4;color:#0b0c0e;border:0;border-radius:14px;padding:19px 24px;font-size:18px;font-weight:700;transition:background .15s,transform .1s}
+.btn-primary:hover{background:#fff}
+.btn-primary:active{transform:scale(.99)}
+.hero .btn-primary{width:auto;min-width:280px}
+.btn-ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-weight:600;color:var(--text);transition:background .15s}
+.btn-ghost:hover{background:#1c1e21}
+
+/* ---------- DRAWERS ---------- */
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s}
+#scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;left:50%;width:min(560px,calc(100vw - 20px));max-height:calc(100dvh - 20px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-top:0;border-radius:0 0 22px 22px;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:translate(-50%,-110%);visibility:hidden;transition:transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s .38s}
+.drawer.open{transform:translate(-50%,0);visibility:visible;transition:transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.drawer.tall{height:min(800px,calc(100dvh - 20px))}
+.drawer.small{width:min(440px,calc(100vw - 20px))}
+.drawer>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px 14px;border-bottom:1px solid var(--line-soft)}
+.drawer h2{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em}
+.drawer .body{padding:18px 24px 24px;overflow:auto;flex:1;overscroll-behavior:contain}
+.drawer>footer{padding:14px 24px 20px;background:#111214;border-top:1px solid var(--line-soft);border-radius:0 0 22px 22px}
+.linkbtn{background:none;border:0;color:var(--muted);font-weight:600;font-size:16px;padding:8px 2px}
+.linkbtn:hover{color:var(--text)}
+.muted{color:var(--muted)}
+.small-text{font-size:14px}
+.mail{display:inline-block;margin:0 0 20px;color:var(--muted);font-size:16px}
+
+/* form elements */
+.field{margin-bottom:22px}
+.field>label,.lbl{display:block;color:var(--muted);font-size:14px;margin-bottom:6px}
+.field input[type=text],.field input[type=email],.field input[type=password],.field input[type=number],.field select{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--text);font:inherit;font-size:20px;font-weight:600;padding:8px 0 12px;outline:none;border-radius:0}
+.field input:focus,.field select:focus{border-bottom-color:var(--accent)}
+.field input::placeholder{color:#55585e}
+.selwrap{position:relative}
+.selwrap select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:30px}
+.selwrap::after{content:"";position:absolute;right:6px;top:50%;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+select option{background:#141517;color:var(--text)}
+textarea{width:100%;min-height:170px;resize:vertical;background:var(--panel-dark);border:1px solid var(--line);border-radius:14px;color:var(--text);font:inherit;font-size:16px;line-height:1.5;padding:14px 16px;outline:none}
+textarea:focus{border-color:var(--accent)}
+.counter{text-align:right;font-size:13px;color:var(--muted);margin-top:6px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;background:#0c0d0f;border:1px solid var(--line);border-radius:14px;padding:4px}
+.seg button{background:transparent;border:0;border-radius:10px;padding:15px 6px;color:var(--muted);font-weight:600;font-size:16px;transition:background .15s,color .15s}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed=true]{background:var(--seg);color:var(--text);box-shadow:inset 0 0 0 1px #3a3d42}
+.seg.compact button{padding:12px 6px;font-size:15px}
+.seg.roles button{padding:10px 2px;display:flex;flex-direction:column;gap:2px;font-size:16px}
+.seg.roles small{font-size:11px;font-weight:500;opacity:.8}
+.msg{min-height:20px;font-size:14px;margin:6px 0 10px}
+.msg.err{color:var(--danger)} .msg.ok{color:var(--ok)}
+.reminder{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:14px;color:var(--muted);margin:18px 0 14px}
+.reminder a{color:var(--text);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+input[type=range]{width:100%;accent-color:var(--accent);margin:6px 0 0}
+
+/* tabs */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;margin-bottom:6px;scrollbar-width:thin}
+.tab{flex:none;background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 15px;color:var(--muted);font-weight:600;font-size:15px}
+.tab[aria-selected=true]{background:var(--text);color:#0b0c0e;border-color:var(--text)}
+
+/* achievements */
+.ach{display:grid;grid-template-columns:42px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);align-items:center}
+.ach .ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--muted)}
+.ach.done .ic{background:var(--accent);border-color:var(--accent);color:#000}
+.ach h4{margin:0 0 3px;font-size:17px}
+.ach p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+.bar{height:6px;background:#23252a;border-radius:6px;margin-top:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:6px}
+.empty{padding:36px 8px;text-align:center;color:var(--muted);line-height:1.5}
+
+/* friends / archive */
+.box{background:var(--panel-dark);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.code{font-size:26px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;margin:4px 0 12px;word-break:break-all}
+.inline{display:flex;gap:10px}
+.inline input{flex:1;min-width:0;background:transparent;border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-size:16px;padding:12px 14px;outline:none}
+.inline input:focus{border-color:var(--accent)}
+h3{margin:22px 0 10px;font-size:18px}
+h3:first-child{margin-top:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.career{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.career .nm{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.career .st{color:var(--muted);font-size:14px;margin-top:3px;line-height:1.4}
+.career .pts{text-align:right}
+.career .pts b{display:block;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.career .pts span{font-size:12px;color:var(--muted)}
+.policy p{color:#c4c7cc;line-height:1.55;font-size:15px;margin:0 0 12px}
+.policy h4{margin:18px 0 6px;font-size:16px}
+
+/* identity */
+.idgrid{display:grid;grid-template-columns:1fr 160px;gap:0 22px;align-items:start}
+.avatarcol{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:6px}
+#avatar svg,#avatarPreview svg{height:190px;width:auto;display:block}
+.row2{display:grid;grid-template-columns:110px 1fr;gap:18px;margin-bottom:22px;align-items:end}
+.row2 .field{margin:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
+.pair .lbl{margin-left:2px}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;color:var(--text);background:none;border:0;padding:0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.tg{margin-bottom:20px}
+.tg h4{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:600}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.team{display:flex;align-items:center;gap:10px;text-align:left;background:var(--panel-dark);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:600;font-size:15px}
+.team:hover{border-color:#41444a}
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.sw button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.sw button[aria-pressed=true]{border-color:var(--text)}
+.langbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.langbtns button{background:var(--panel-dark);border:1px solid var(--line);border-radius:16px;padding:26px 10px;font-size:20px;font-weight:700}
+.langbtns button:hover{border-color:var(--accent)}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.btnrow .btn-primary{padding:15px 10px;font-size:16px}
+.btnrow .btn-ghost{padding:15px 10px;font-size:16px}
+.summary{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center}
+.summary svg{height:170px;width:auto}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:15px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:600}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#f1f2f4;color:#0b0c0e;padding:12px 20px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+#toast.on{opacity:1;transform:translateX(-50%)}
+/* ---------- CARRIERA ---------- */
+#career{display:none;flex-direction:column;height:100%;background:var(--bg)}
+.chead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line-soft);background:#0e0f11}
+.chead .ctitle{font-weight:800;letter-spacing:-.02em;font-size:18px;text-align:center}
+.chead .cmoney{justify-self:end;color:var(--muted);font-size:14px;font-weight:600}
+.cmain{flex:1;overflow:auto;padding:22px 20px 28px}
+.cwrap{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:310px 1fr;gap:20px;align-items:start}
+.pcard,.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.pcard{text-align:center}
+.pcard svg.av{height:170px;width:auto;display:block;margin:0 auto 6px}
+.pcard h2{margin:0;font-size:26px;letter-spacing:-.02em;line-height:1.1}
+.pcard .meta{color:var(--muted);font-size:14px;margin:8px 0 0;line-height:1.5}
+.ring{width:120px;height:120px;margin:18px auto 6px;display:block}
+.pcard .lbl{margin:0 0 6px;text-align:left}
+.kvrow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line-soft);font-size:14px;text-align:left}
+.kvrow span:first-child{color:var(--muted)}
+.kvrow b{text-align:right}
+.ctabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px;margin-bottom:20px}
+.tile{background:var(--panel-dark);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tile b{display:block;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tile span{color:var(--muted);font-size:13px}
+.tl{height:8px;background:#23252a;border-radius:8px;overflow:hidden;margin:8px 0 6px}
+.tl i{display:block;height:100%;background:var(--accent);border-radius:8px}
+.tw{overflow-x:auto}
+.stbl{width:100%;border-collapse:collapse;font-size:14px}
+.stbl th{color:var(--muted);font-weight:600;text-align:left;padding:8px;border-bottom:1px solid var(--line)}
+.stbl td{padding:11px 8px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.cfoot{border-top:1px solid var(--line-soft);background:#111214;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px))}
+.cfoot-in{max-width:1000px;margin:0 auto;display:flex;gap:18px;align-items:center;justify-content:space-between}
+.cfoot-in .hint{color:var(--muted);font-size:14px;line-height:1.4}
+.cfoot-in .btn-primary{width:auto;min-width:240px;flex:none}
+.choice{display:block;width:100%;text-align:left;background:var(--panel-dark);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:16px;font-weight:600;transition:border-color .15s,background .15s}
+.choice:hover{border-color:var(--accent);background:#17181b}
+.chip2{display:inline-block;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:700;margin:6px 6px 0 0;background:#23252a;color:var(--text)}
+.chip2.up{color:var(--ok)} .chip2.down{color:var(--danger)} .chip2.gold{color:#ffc857}
+.offer{background:var(--panel-dark);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.offer .top{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;margin-bottom:10px}
+.offer .btn-primary{padding:13px;font-size:16px;margin-top:12px}
+.rep{padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.rep h4{margin:0 0 4px;font-size:17px}
+.rep p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+@media (max-width:760px){
+  .cwrap{grid-template-columns:1fr}
+  .cfoot-in{flex-direction:column;align-items:stretch;gap:10px}
+  .cfoot-in .btn-primary{width:100%}
+  .cfoot-in .hint{text-align:center}
+}
+
+@media (max-width:480px){
+  .idgrid{grid-template-columns:1fr 112px;gap:0 12px}
+  #avatar svg{height:150px}
+  .drawer .body,.drawer>header,.drawer>footer{padding-left:16px;padding-right:16px}
+  .row2{grid-template-columns:84px 1fr;gap:12px}
+  .seg.roles small{display:none}
+  .topnav{gap:2px 18px}
+  .summary{grid-template-columns:90px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+</head>
+<body>
+
+<!-- ============ HOME ============ -->
+<div id="home">
+  <svg class="court" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect x="20" y="20" width="960" height="520"/>
+    <line x1="500" y1="20" x2="500" y2="540"/>
+    <circle cx="500" cy="280" r="70"/>
+    <rect x="20" y="200" width="180" height="160"/><path d="M200 220 A60 60 0 0 1 200 340"/>
+    <path d="M20 60 H110 A250 250 0 0 1 110 500 H20"/>
+    <rect x="800" y="200" width="180" height="160"/><path d="M800 220 A60 60 0 0 0 800 340"/>
+    <path d="M980 60 H890 A250 250 0 0 0 890 500 H980"/>
+  </svg>
+
+  <nav class="topnav" aria-label="Menu principale">
+    <button data-open="feedback">Feedback</button>
+    <button data-open="obiettivi">Obiettivi</button>
+    <button data-open="amici">Amici</button>
+    <button data-open="archivio">Archivio</button>
+    <button data-open="login" id="navLogin">Accedi</button>
+  </nav>
+
+  <main class="hero">
+    <h1>MyCareer</h1>
+    <p class="sub">The GOAT</p>
+    <button class="btn-primary" id="start">Comincia MyCareer</button>
+    <button class="linkbtn" id="resumeBtn" hidden style="margin-top:18px"></button>
+  </main>
+</div>
+
+<div id="scrim"></div>
+<div id="toast" role="status"></div>
+
+<!-- ============ FEEDBACK ============ -->
+<section class="drawer" id="d-feedback" role="dialog" aria-modal="true" aria-labelledby="t-feedback" aria-hidden="true">
+  <header><h2 id="t-feedback">FeedBack</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body">
+    <a class="mail" href="mailto:unbound@thegoat.it">unbound@thegoat.it</a>
+    <div class="field"><span class="lbl">Tipo</span>
+      <div class="seg" id="fbType"><button data-v="BUG" aria-pressed="true">BUG</button><button data-v="IDEA" aria-pressed="false">IDEA</button></div>
+    </div>
+    <div class="field" style="margin-bottom:0"><label class="lbl" for="fbMsg">IL TUO MESSAGGIO</label>
+      <textarea id="fbMsg" placeholder="Descrivi il bug o la tua idea..."></textarea>
+      <div class="counter"><span id="fbCount">0</span> / 2000 parole</div>
+    </div>
+    <div class="reminder"><span>Non inviare password, codici o link esterni.</span><a id="openPrivacy" role="button" tabindex="0">Privacy Policy</a></div>
+    <div class="msg" id="fbStatus"></div>
+    <button class="btn-primary" id="fbSend">Invia Feedback</button>
+  </div>
+</section>
+
+<!-- ============ PRIVACY ============ -->
+<section class="drawer" id="d-privacy" role="dialog" aria-modal="true" aria-labelledby="t-privacy" aria-hidden="true">
+  <header><h2 id="t-privacy">Privacy Policy</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body policy">
+    <p class="muted">Ultimo aggiornamento: 14 ottobre 2026. Testo provvisorio: fallo rivedere prima di pubblicare il gioco online.</p>
+    <h4>Quali dati usiamo</h4>
+    <p>Nickname, email e password dell'account, le carriere nell'Archivio e i feedback che scrivi. In questa versione tutto resta salvato solo nel tuo browser (archiviazione locale) e non viene inviato a nessun server.</p>
+    <h4>Feedback</h4>
+    <p>Quando premi "Invia Feedback" il messaggio viene salvato sul tuo dispositivo e si apre il tuo programma di posta per spedirlo a unbound@thegoat.it. Non scrivere password, codici di accesso o link esterni.</p>
+    <h4>Condivisione</h4>
+    <p>Non vendiamo né cediamo i tuoi dati a terzi.</p>
+    <h4>Cancellazione</h4>
+    <p>Puoi cancellare tutto in qualsiasi momento svuotando i dati del sito dalle impostazioni del browser, oppure scrivendo a unbound@thegoat.it.</p>
+    <h4>Contatti</h4>
+    <p>unbound@thegoat.it</p>
+  </div>
+</section>
+
+<!-- ============ OBIETTIVI ============ -->
+<section class="drawer tall" id="d-obiettivi" role="dialog" aria-modal="true" aria-labelledby="t-ob" aria-hidden="true">
+  <header><h2 id="t-ob">Obiettivi</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body">
+    <p class="muted small-text" style="margin:0 0 14px"><span id="achCount">0 / 67</span> obiettivi conquistati</p>
+    <div class="tabs" id="achTabs" role="tablist"></div>
+    <div id="achList"></div>
+  </div>
+</section>
+
+<!-- ============ AMICI ============ -->
+<section class="drawer tall" id="d-amici" role="dialog" aria-modal="true" aria-labelledby="t-am" aria-hidden="true">
+  <header><h2 id="t-am">Amici</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body" id="friendsBody"></div>
+</section>
+
+<!-- ============ ARCHIVIO ============ -->
+<section class="drawer tall" id="d-archivio" role="dialog" aria-modal="true" aria-labelledby="t-ar" aria-hidden="true">
+  <header><h2 id="t-ar">Archivio</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body" id="archiveBody"></div>
+</section>
+
+<!-- ============ ACCEDI ============ -->
+<section class="drawer" id="d-login" role="dialog" aria-modal="true" aria-labelledby="t-lg" aria-hidden="true">
+  <header><h2 id="t-lg">Accedi</h2><button class="linkbtn" data-close>Chiudi</button></header>
+  <div class="body" id="loginBody"></div>
+</section>
+
+<!-- ============ LINGUA ============ -->
+<section class="drawer small" id="d-lang" role="dialog" aria-modal="true" aria-labelledby="t-lang" aria-hidden="true">
+  <header><h2 id="t-lang">Lingua / Language</h2><button class="linkbtn" data-close>×</button></header>
+  <div class="body">
+    <p class="muted" style="margin:0 0 16px">Scegli la lingua · Choose your language</p>
+    <div class="langbtns"><button data-lang="it">Italiano</button><button data-lang="en">English</button></div>
+  </div>
+</section>
+
+<!-- ============ IDENTITA' ============ -->
+<section class="drawer tall" id="d-identity" role="dialog" aria-modal="true" aria-labelledby="t-id" aria-hidden="true">
+  <header>
+    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+      <button class="linkbtn" id="idBack" aria-label="Back" style="font-size:26px;line-height:1;padding:2px 8px 6px 0">‹</button>
+      <h2 id="t-id" data-i18n="identity">Identità</h2>
+    </div>
+    <button class="linkbtn" id="idRandom" style="display:flex;align-items:center;gap:8px;color:var(--text)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+      <span data-i18n="generate">Genera giocatore</span>
+    </button>
+  </header>
+  <div class="body">
+    <div class="idgrid">
+      <div>
+        <div class="field"><label for="f-first" data-i18n="first">Nome</label><input type="text" id="f-first" maxlength="20" autocomplete="off"></div>
+        <div class="field"><label for="f-last" data-i18n="last">Cognome</label><input type="text" id="f-last" maxlength="24" autocomplete="off"></div>
+        <div class="field"><label for="f-nat" data-i18n="nat">Nazionalità</label><div class="selwrap"><select id="f-nat"></select></div></div>
+      </div>
+      <div class="avatarcol"><div id="avatar"></div><button class="btn-ghost" id="editAvatar" data-i18n="edit">Modifica</button></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="f-num" data-i18n="num">Numero</label><input type="number" id="f-num" min="0" max="99"></div>
+      <div><span class="lbl" data-i18n="hand">Mano preferita</span>
+        <div class="seg" data-key="hand"><button data-v="L" data-i18n="left">Sinistra</button><button data-v="R" data-i18n="right">Destra</button></div>
+      </div>
+    </div>
+    <div class="field"><span class="lbl" data-i18n="role">Ruolo</span><div class="seg roles" data-key="role" id="seg-role"></div></div>
+    <div class="field"><label class="lbl" for="f-h"><span data-i18n="height">Altezza</span>: <b id="hval"></b></label><input type="range" id="f-h" min="170" max="226"></div>
+  </div>
+  <footer>
+    <div class="pair">
+      <div><span class="lbl" data-i18n="club">Club di partenza</span>
+        <div class="seg compact" data-key="teamMode"><button data-v="random" data-i18n="rnd">Casuale</button><button data-v="pick" data-i18n="pick">Scegli tu</button></div>
+        <div id="teamChip"></div>
+      </div>
+      <div><span class="lbl" data-i18n="diff">Difficoltà</span>
+        <div class="seg compact" data-key="diff"><button data-v="normal" data-i18n="normal">Normale</button><button data-v="hof" data-i18n="hof">Hall of Fame</button></div>
+      </div>
+    </div>
+    <div class="msg err" id="idErr"></div>
+    <button class="btn-primary" id="idContinue" data-i18n="cont">Continua</button>
+  </footer>
+</section>
+
+<!-- ============ CONFERMA TORNA ALLA HOME ============ -->
+<section class="drawer small" id="d-confirm" role="alertdialog" aria-modal="true" aria-labelledby="t-cf" aria-hidden="true">
+  <header><h2 id="t-cf" data-i18n="backTitle">Vuoi tornare alla Home?</h2></header>
+  <div class="body">
+    <p class="muted" style="margin:0" data-i18n="backText"></p>
+    <div class="btnrow"><button class="btn-primary" id="cfHome" data-i18n="backHome">Torna alla Home</button><button class="btn-ghost" id="cfStay" data-i18n="stay">Resta Qua</button></div>
+  </div>
+</section>
+
+<!-- ============ SCELTA SQUADRA ============ -->
+<section class="drawer tall" id="d-team" role="dialog" aria-modal="true" aria-labelledby="t-tm" aria-hidden="true">
+  <header><h2 id="t-tm" data-i18n="pickTeam">Scegli la squadra del draft</h2><button class="linkbtn" data-close data-i18n="close">Chiudi</button></header>
+  <div class="body" id="teamBody"></div>
+</section>
+
+<!-- ============ MODIFICA AVATAR ============ -->
+<section class="drawer" id="d-edit" role="dialog" aria-modal="true" aria-labelledby="t-ed" aria-hidden="true">
+  <header><h2 id="t-ed" data-i18n="edit">Modifica</h2><button class="linkbtn" data-close data-i18n="done">Fatto</button></header>
+  <div class="body">
+    <div style="display:flex;gap:22px;align-items:flex-start">
+      <div id="avatarPreview" style="flex:none"></div>
+      <div style="flex:1;min-width:0">
+        <span class="lbl" data-i18n="skin">Pelle</span><div class="sw" id="sw-skin"></div>
+        <span class="lbl" data-i18n="hairStyle">Capelli</span><div class="seg compact" id="seg-hair" style="grid-auto-flow:row;grid-template-columns:repeat(3,1fr);margin-bottom:20px"></div>
+        <span class="lbl" data-i18n="hairColor">Colore capelli</span><div class="sw" id="sw-hc"></div>
+        <span class="lbl" data-i18n="kit">Maglia</span><div class="sw" id="sw-jersey" style="margin-bottom:0"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GIOCATORE CREATO ============ -->
+<section class="drawer small" id="d-created" role="dialog" aria-modal="true" aria-labelledby="t-cr" aria-hidden="true">
+  <header><h2 id="t-cr" data-i18n="createdTitle">Giocatore creato</h2></header>
+  <div class="body">
+    <div class="summary"><div id="crAvatar"></div><dl class="kv" id="crInfo"></dl></div>
+    <p class="muted small-text" style="margin:18px 0 0" data-i18n="nextStep"></p>
+    <button class="btn-primary" id="crClose" style="margin-top:18px" data-i18n="startCareer">Inizia la carriera</button>
+  </div>
+</section>
+
+<!-- ============ PAGINA CARRIERA ============ -->
+<div id="career">
+  <header class="chead">
+    <button class="linkbtn" id="cHome" style="justify-self:start">‹ Home</button>
+    <div class="ctitle">MyCareer</div>
+    <div class="cmoney" id="cMoney"></div>
+  </header>
+  <main class="cmain"><div class="cwrap" id="cMain"></div></main>
+  <footer class="cfoot"><div class="cfoot-in"><div class="hint" id="cHint"></div><button class="btn-primary" id="cGo"></button></div></footer>
+</div>
+
+<section class="drawer" id="d-event" role="dialog" aria-modal="true" aria-labelledby="h-event" aria-hidden="true"><header><h2 id="h-event"></h2></header><div class="body" id="b-event"></div></section>
+<section class="drawer" id="d-report" role="dialog" aria-modal="true" aria-labelledby="h-report" aria-hidden="true"><header><h2 id="h-report"></h2></header><div class="body" id="b-report"></div></section>
+<section class="drawer" id="d-draft" role="dialog" aria-modal="true" aria-labelledby="h-draft" aria-hidden="true"><header><h2 id="h-draft"></h2></header><div class="body" id="b-draft"></div></section>
+<section class="drawer" id="d-offers" role="dialog" aria-modal="true" aria-labelledby="h-offers" aria-hidden="true"><header><h2 id="h-offers"></h2></header><div class="body" id="b-offers"></div></section>
+<section class="drawer small" id="d-final" role="dialog" aria-modal="true" aria-labelledby="h-final" aria-hidden="true"><header><h2 id="h-final"></h2></header><div class="body" id="b-final"></div></section>
+<section class="drawer" id="d-retired" role="dialog" aria-modal="true" aria-labelledby="h-retired" aria-hidden="true"><header><h2 id="h-retired"></h2></header><div class="body" id="b-retired"></div></section>
+<section class="drawer small" id="d-exit" role="alertdialog" aria-modal="true" aria-labelledby="h-exit" aria-hidden="true"><header><h2 id="h-exit"></h2></header><div class="body" id="b-exit"></div></section>
+
+<script>
+"use strict";
+/* ============================================================
+   UTILITÀ
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
+function copyText(t) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t).then(() => toast('Copiato'));
+  const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('Copiato'); } catch (e) {} ta.remove();
+}
+async function sha(s) { // NB: protezione solo dimostrativa, tutto resta nel browser
+  try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) | 0; return 'f' + h; }
+}
+const lockIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const checkIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>';
+
+/* ============================================================
+   GESTIONE BANNER (si aprono dall'alto, sopra la home)
+   ============================================================ */
+const stack = [];
+const hooks = {};
+const scrim = $('#scrim');
+function openD(id) {
+  const el = $('#d-' + id); if (!el || stack.includes(id)) return;
+  stack.push(id);
+  el.style.zIndex = 20 + stack.length * 2;
+  scrim.style.zIndex = 19 + stack.length * 2;
+  scrim.classList.add('on');
+  el.classList.add('open'); el.setAttribute('aria-hidden', 'false');
+  if (renderers[id]) renderers[id]();
+  setTimeout(() => { const f = $('input:not([type=range]):not([type=number]),textarea', el); if (f && matchMedia('(hover:hover)').matches) f.focus({ preventScroll: true }); }, 400);
+}
+function closeD() {
+  const id = stack.pop(); if (!id) return;
+  const el = $('#d-' + id); el.classList.remove('open'); el.setAttribute('aria-hidden', 'true');
+  if (stack.length) scrim.style.zIndex = 19 + stack.length * 2; else scrim.classList.remove('on');
+  if (hooks[id]) hooks[id]();
+}
+function closeAll() { while (stack.length) closeD(); }
+function swapD(id) { closeD(); openD(id); }
+function dismiss() { const top = stack[stack.length - 1]; if (!top || LOCKED.has(top)) return; if (top === 'identity') openD('confirm'); else closeD(); }
+scrim.addEventListener('click', dismiss);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') dismiss(); });
+$$('[data-open]').forEach(b => b.addEventListener('click', () => openD(b.dataset.open)));
+$$('[data-close]').forEach(b => b.addEventListener('click', dismiss));
+
+/* ============================================================
+   FEEDBACK
+   ============================================================ */
+let fbType = 'BUG';
+$$('#fbType button').forEach(b => b.addEventListener('click', () => {
+  fbType = b.dataset.v; $$('#fbType button').forEach(x => x.setAttribute('aria-pressed', x === b));
+}));
+const countWords = s => (s.trim().match(/\S+/g) || []).length;
+function clampWords(s, max) {
+  const re = /\S+/g; let m, c = 0;
+  while ((m = re.exec(s))) { if (++c === max) return s.slice(0, m.index + m[0].length); }
+  return s;
+}
+$('#fbMsg').addEventListener('input', e => {
+  if (countWords(e.target.value) > 2000) e.target.value = clampWords(e.target.value, 2000);
+  $('#fbCount').textContent = countWords(e.target.value);
+});
+$('#openPrivacy').addEventListener('click', () => openD('privacy'));
+$('#openPrivacy').addEventListener('keydown', e => { if (e.key === 'Enter') openD('privacy'); });
+$('#fbSend').addEventListener('click', () => {
+  const st = $('#fbStatus'), msg = $('#fbMsg').value.trim();
+  if (!msg) { st.className = 'msg err'; st.textContent = 'Scrivi un messaggio prima di inviare.'; return; }
+  const list = store.get('goat_feedback', []); list.push({ type: fbType, msg, date: new Date().toISOString() }); store.set('goat_feedback', list);
+  st.className = 'msg ok'; st.textContent = 'Feedback salvato. Si apre la tua app di posta per inviarlo.';
+  $('#fbMsg').value = ''; $('#fbCount').textContent = '0';
+  const body = encodeURIComponent(msg.slice(0, 1500));
+  location.href = 'mailto:unbound@thegoat.it?subject=' + encodeURIComponent('[' + fbType + '] MyCareer - The GOAT') + '&body=' + body;
+});
+
+/* ============================================================
+   OBIETTIVI (67) + SFIDE + CONQUISTATI
+   ============================================================ */
+const ACH = [
+  ['Punti', [
+    ['Primo canestro', 'Segna i tuoi primi punti in carriera'],
+    ['Doppia cifra', 'Chiudi una stagione a 10 punti di media'],
+    ['Ventello', 'Chiudi una stagione a 20 punti di media'],
+    ['Capocannoniere', 'Vinci la classifica marcatori'],
+    ['Fenomeno dei 30', 'Chiudi una stagione a 30 punti di media'],
+    ['Partita da 50', 'Segna 50 punti in una singola partita'],
+    ['Quota 1.000', 'Raggiungi 1.000 punti in carriera'],
+    ['Quota 10.000', 'Raggiungi 10.000 punti in carriera'],
+    ['Quota 25.000', 'Raggiungi 25.000 punti in carriera'],
+    ['Oltre ogni record', 'Raggiungi 40.000 punti in carriera']]],
+  ['Assist', [
+    ['Primo passaggio vincente', 'Smazza il tuo primo assist'],
+    ['Regista', 'Chiudi una stagione a 5 assist di media'],
+    ['Playmaker puro', 'Chiudi una stagione a 8 assist di media'],
+    ['Re degli assist', 'Guida la classifica assist'],
+    ['Tripla doppia', 'Chiudi una partita in tripla doppia'],
+    ['Partita da 15 assist', 'Servi 15 assist in una sola partita'],
+    ['Quota 5.000 assist', 'Raggiungi 5.000 assist in carriera'],
+    ['Quota 10.000 assist', 'Raggiungi 10.000 assist in carriera']]],
+  ['Rimbalzi', [
+    ['Primo rimbalzo', 'Cattura il tuo primo rimbalzo'],
+    ['Sotto canestro', 'Chiudi una stagione a 8 rimbalzi di media'],
+    ['Dominatore dell\'area', 'Chiudi una stagione a 12 rimbalzi di media'],
+    ['Re dei rimbalzi', 'Guida la classifica rimbalzi'],
+    ['Partita da 20 rimbalzi', 'Cattura 20 rimbalzi in una partita'],
+    ['Doppia doppia di media', 'Chiudi una stagione in doppia doppia di media'],
+    ['Quota 5.000 rimbalzi', 'Raggiungi 5.000 rimbalzi in carriera'],
+    ['Quota 10.000 rimbalzi', 'Raggiungi 10.000 rimbalzi in carriera']]],
+  ['Difesa', [
+    ['Prima rubata', 'Strappa la tua prima palla'],
+    ['Mani veloci', 'Chiudi una stagione a 2 rubate di media'],
+    ['Prima stoppata', 'Stoppa il tuo primo tiro'],
+    ['Protettore del ferro', 'Chiudi una stagione a 2 stoppate di media'],
+    ['Difensore dell\'anno', 'Vinci il premio di miglior difensore'],
+    ['Partita da 10 stoppate', 'Stoppa 10 tiri in una partita'],
+    ['Quota 1.500 rubate', 'Raggiungi 1.500 rubate in carriera'],
+    ['Quota 1.000 stoppate', 'Raggiungi 1.000 stoppate in carriera']]],
+  ['Trofei', [
+    ['Rookie dell\'anno', 'Vinci il premio matricola dell\'anno'],
+    ['Sesto uomo dell\'anno', 'Vinci il premio di miglior sesto uomo'],
+    ['Primo All-Star', 'Vieni convocato all\'All-Star Game'],
+    ['All-NBA First Team', 'Entra nel primo quintetto della lega'],
+    ['MVP di stagione', 'Vinci il premio MVP della stagione'],
+    ['MVP delle Finali', 'Vinci il premio MVP delle Finali'],
+    ['Primo anello', 'Vinci il tuo primo titolo NBA'],
+    ['Tre anelli', 'Vinci 3 titoli NBA'],
+    ['Cinque anelli', 'Vinci 5 titoli NBA'],
+    ['Sette anelli', 'Vinci 7 titoli NBA']]],
+  ['Campionati', [
+    ['Primo playoff', 'Qualificati ai playoff'],
+    ['Secondo turno', 'Supera il primo turno dei playoff'],
+    ['Finale di Conference', 'Raggiungi la finale di Conference'],
+    ['Finali NBA', 'Raggiungi le Finali NBA'],
+    ['Rimonta impossibile', 'Vinci una serie playoff partendo dall\'1-3'],
+    ['Stagione da 60 vittorie', 'Chiudi la regular season con 60 vittorie'],
+    ['Stagione da 70 vittorie', 'Chiudi la regular season con 70 vittorie'],
+    ['Back-to-back', 'Vinci due titoli consecutivi'],
+    ['Three-peat', 'Vinci tre titoli consecutivi']]],
+  ['Carriera', [
+    ['Il primo giorno', 'Crea il tuo primo giocatore'],
+    ['Overall 70', 'Raggiungi 70 di overall'],
+    ['Overall 80', 'Raggiungi 80 di overall'],
+    ['Overall 90', 'Raggiungi 90 di overall'],
+    ['Overall 99', 'Raggiungi 99 di overall'],
+    ['Carriera completa', 'Arriva ai 40 anni di età'],
+    ['L\'ultimo ballo', 'Firma un ultimo contratto a 40 anni e ritirati a 41'],
+    ['Leggenda Hall of Fame', 'Completa una carriera in difficoltà Hall of Fame']]],
+  ['Draft e contratti', [
+    ['Prima scelta assoluta', 'Vieni scelto con la numero 1 al draft'],
+    ['Lottery pick', 'Vieni scelto tra le prime 5 posizioni'],
+    ['Contratto massimo', 'Firma un contratto al massimo salariale'],
+    ['Giramondo', 'Gioca per 3 squadre diverse'],
+    ['Uomo franchigia', 'Gioca 10 stagioni con la stessa squadra'],
+    ['Maglia ritirata', 'Fai ritirare il tuo numero dalla tua squadra']]]
+];
+const CHAL = [
+  ['Un anello alla prima', 'Vinci un titolo con la squadra del tuo draft', 1],
+  ['Re del tiro', 'Chiudi 3 stagioni con almeno 25 punti di media', 3],
+  ['Playmaker totale', 'Chiudi 2 stagioni con almeno 9 assist di media', 2],
+  ['Muro difensivo', 'Vinci 2 volte il premio di miglior difensore', 2],
+  ['Fedele alla maglia', 'Gioca 8 stagioni con la stessa squadra', 8],
+  ['Dall\'ultimo al primo', 'Vinci il titolo dopo una stagione sotto il 40% di vittorie', 1]
+];
+const ACH_TOTAL = ACH.reduce((n, c) => n + c[1].length, 0);
+let achTab = ACH[0][0];
+function renderAch() {
+  const done = new Set(store.get('goat_ach', []));
+  $('#achCount').textContent = done.size + ' / ' + ACH_TOTAL;
+  const tabs = [...ACH.map(c => c[0]), 'Sfide', 'Conquistati'];
+  $('#achTabs').innerHTML = tabs.map(t => `<button class="tab" role="tab" aria-selected="${t === achTab}" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+  $$('#achTabs .tab').forEach(b => b.addEventListener('click', () => { achTab = b.dataset.t; renderAch(); }));
+  const row = (id, t, d, ok) => `<div class="ach ${ok ? 'done' : ''}"><div class="ic">${ok ? checkIcon : lockIcon}</div><div><h4>${esc(t)}</h4><p>${esc(d)}</p></div></div>`;
+  let html = '';
+  if (achTab === 'Sfide') {
+    const prog = store.get('goat_chal', {});
+    html = CHAL.map((c, i) => { const v = Math.min(prog[i] || 0, c[2]); return `<div class="ach" style="grid-template-columns:1fr"><div><h4>${esc(c[0])}</h4><p>${esc(c[1])}</p><div class="bar"><i style="width:${v / c[2] * 100}%"></i></div><p style="margin-top:6px">${v} / ${c[2]}</p></div></div>`; }).join('');
+  } else if (achTab === 'Conquistati') {
+    ACH.forEach((c, ci) => c[1].forEach((a, ai) => { if (done.has(ci + '-' + ai)) html += row('', a[0], a[1], true); }));
+    if (!html) html = '<div class="empty">Non hai ancora conquistato nessun obiettivo.<br>Gioca una carriera per sbloccarli.</div>';
+  } else {
+    const ci = ACH.findIndex(c => c[0] === achTab);
+    html = ACH[ci][1].map((a, ai) => row('', a[0], a[1], done.has(ci + '-' + ai))).join('');
+  }
+  $('#achList').innerHTML = html;
+}
+
+/* ============================================================
+   ACCOUNT (salvati localmente nel browser)
+   ============================================================ */
+let session = store.get('goat_session', null);
+let afterLogin = null, loginMode = 'login';
+const getUsers = () => store.get('goat_users', {});
+const me = () => (session ? getUsers()[session] : null);
+function updateNav() { const u = me(); $('#navLogin').textContent = u ? u.nick : 'Accedi'; }
+function renderLogin() {
+  const u = me(), body = $('#loginBody');
+  if (u) {
+    body.innerHTML = `<p style="font-size:20px;font-weight:700;margin:0 0 4px">${esc(u.nick)}</p><p class="muted" style="margin:0 0 22px">${esc(session)}</p><button class="btn-ghost" id="logout" style="width:100%">Esci</button>`;
+    $('#logout').addEventListener('click', () => { session = null; store.set('goat_session', null); updateNav(); closeD(); toast('Hai effettuato l\'uscita'); });
+    return;
+  }
+  const reg = loginMode === 'register';
+  body.innerHTML = `
+    <div class="tabs"><button class="tab" data-m="login" aria-selected="${!reg}">Accedi</button><button class="tab" data-m="register" aria-selected="${reg}">Crea account</button></div>
+    <form id="lgForm" novalidate>
+      ${reg ? '<div class="field"><label for="l-nick">Nickname</label><input type="text" id="l-nick" maxlength="16" autocomplete="nickname"></div>' : ''}
+      <div class="field"><label for="l-mail">Email</label><input type="email" id="l-mail" autocomplete="email"></div>
+      <div class="field"><label for="l-pw">Password</label><input type="password" id="l-pw" autocomplete="${reg ? 'new-password' : 'current-password'}"></div>
+      ${reg ? '<div class="field"><label for="l-pw2">Conferma password</label><input type="password" id="l-pw2" autocomplete="new-password"></div>' : ''}
+      <div class="msg err" id="lgErr"></div>
+      <button class="btn-primary" type="submit">${reg ? 'Crea account' : 'Accedi'}</button>
+    </form>`;
+  $$('#loginBody .tab').forEach(b => b.addEventListener('click', () => { loginMode = b.dataset.m; renderLogin(); }));
+  $('#lgForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = t => { $('#lgErr').textContent = t; };
+    const mail = $('#l-mail').value.trim().toLowerCase(), pw = $('#l-pw').value, users = getUsers();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) return err('Inserisci un\'email valida.');
+    if (reg) {
+      const nick = $('#l-nick').value.trim();
+      if (nick.length < 3) return err('Il nickname deve avere almeno 3 caratteri.');
+      if (pw.length < 6) return err('La password deve avere almeno 6 caratteri.');
+      if (pw !== $('#l-pw2').value) return err('Le password non coincidono.');
+      if (users[mail]) return err('Esiste già un account con questa email.');
+      const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', part = () => Array.from({ length: 4 }, () => A[rnd(0, A.length - 1)]).join('');
+      users[mail] = { nick, hash: await sha(pw), code: 'GOAT-' + part() + '-' + part(), friends: [], rooms: [] };
+      store.set('goat_users', users);
+    } else {
+      if (!users[mail] || users[mail].hash !== await sha(pw)) return err('Email o password errati.');
+    }
+    session = mail; store.set('goat_session', mail); updateNav();
+    const next = afterLogin; afterLogin = null; closeD();
+    toast('Benvenuto, ' + users[mail].nick);
+    if (next) setTimeout(() => openD(next), 250);
+  });
+}
+
+/* ============================================================
+   AMICI
+   ============================================================ */
+function renderFriends() {
+  const u = me(), body = $('#friendsBody');
+  if (!u) {
+    body.innerHTML = `<div class="empty"><p style="margin:0 0 18px">Per creare stanze e aggiungere amici devi prima accedere.</p><button class="btn-primary" id="goLogin" style="max-width:280px;margin:0 auto">Vai ad Accedi</button></div>`;
+    $('#goLogin').addEventListener('click', () => { afterLogin = 'amici'; loginMode = 'login'; swapD('login'); });
+    return;
+  }
+  const arch = store.get('goat_archive', []), best = arch.length ? Math.max(...arch.map(c => c.overall)) : '—';
+  const save = () => { const us = getUsers(); us[session] = u; store.set('goat_users', us); renderFriends(); };
+  body.innerHTML = `
+    <div class="box"><span class="lbl">Il tuo codice amico</span><div class="code">${esc(u.code)}</div><button class="btn-ghost" id="copyCode">Copia codice</button></div>
+    <h3>Aggiungi amico</h3>
+    <div class="inline"><input id="fr-code" placeholder="GOAT-XXXX-XXXX" maxlength="14" autocomplete="off"><button class="btn-ghost" id="fr-add">Invia richiesta</button></div>
+    <div class="msg err" id="fr-msg"></div>
+    ${u.friends.map(f => `<div class="row"><span>${esc(f)}</span><span class="muted small-text">In attesa</span></div>`).join('')}
+    <h3>Stanze</h3>
+    <div class="inline"><button class="btn-ghost" id="room-new">Crea stanza</button><input id="room-code" placeholder="Codice stanza" maxlength="11" autocomplete="off"><button class="btn-ghost" id="room-join">Entra</button></div>
+    ${u.rooms.map(r => `<div class="row"><span><b>${esc(r.code)}</b></span><button class="linkbtn" data-copy="${esc(r.code)}">Copia</button></div>`).join('')}
+    <h3>Classifica</h3>
+    <div class="row"><span><b>${esc(u.nick)}</b> (tu)</span><span class="muted small-text">0 trofei · overall ${best}</span></div>
+    ${u.friends.length ? '' : '<p class="muted small-text">Aggiungi amici per confrontare trofei e overall.</p>'}
+    <p class="muted small-text" style="margin-top:20px">Versione offline: amici e stanze sono salvati solo su questo dispositivo. La sincronizzazione arriverà con un server online.</p>`;
+  $('#copyCode').addEventListener('click', () => copyText(u.code));
+  $('#fr-add').addEventListener('click', () => {
+    const c = $('#fr-code').value.trim().toUpperCase(), m = $('#fr-msg');
+    if (!/^GOAT-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(c)) return void (m.textContent = 'Codice non valido. Formato: GOAT-XXXX-XXXX');
+    if (c === u.code) return void (m.textContent = 'Questo è il tuo codice.');
+    if (u.friends.includes(c)) return void (m.textContent = 'Richiesta già inviata.');
+    u.friends.push(c); save(); toast('Richiesta inviata');
+  });
+  $('#room-new').addEventListener('click', () => {
+    const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; u.rooms.push({ code: 'ROOM-' + Array.from({ length: 5 }, () => A[rnd(0, A.length - 1)]).join('') }); save(); toast('Stanza creata');
+  });
+  $('#room-join').addEventListener('click', () => {
+    const c = $('#room-code').value.trim().toUpperCase();
+    if (!/^ROOM-[A-Z0-9]{5}$/.test(c)) return void ($('#fr-msg').textContent = 'Codice stanza non valido. Formato: ROOM-XXXXX');
+    if (!u.rooms.some(r => r.code === c)) u.rooms.push({ code: c }); save(); toast('Sei nella stanza ' + c);
+  });
+  $$('[data-copy]', body).forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy)));
+}
+
+/* ============================================================
+   ARCHIVIO
+   ============================================================ */
+function renderArchive() {
+  const list = store.get('goat_archive', []), body = $('#archiveBody');
+  if (!list.length) {
+    body.innerHTML = `<div class="empty">Nessuna carriera archiviata.<br>Le carriere concluse compariranno qui.<br><br><button class="linkbtn" id="demoCareer">Aggiungi una carriera di prova</button></div>`;
+    $('#demoCareer').addEventListener('click', () => { list.push({ name: 'Marco', surname: 'Rossi', team: 'Los Angeles Lakers', overall: 92, seasons: 12, points: 18420 }); store.set('goat_archive', list); renderArchive(); });
+    return;
+  }
+  body.innerHTML = list.slice().reverse().map(c => `
+    <div class="career"><div><div class="nm">${esc(c.name)} ${esc(c.surname)}</div><div class="st">${esc(c.team)}<br>Overall finale ${c.overall} · ${c.seasons} ${c.seasons === 1 ? 'stagione' : 'stagioni'}</div></div>
+    <div class="pts"><b>${Number(c.points).toLocaleString('it-IT')}</b><span>punti totali</span></div></div>`).join('') +
+    '<div style="margin-top:20px"><button class="linkbtn" id="clearArch">Svuota archivio</button></div>';
+  $('#clearArch').addEventListener('click', () => { if (confirm('Vuoi cancellare tutte le carriere archiviate?')) { store.set('goat_archive', []); renderArchive(); } });
+}
+
+/* ============================================================
+   CREAZIONE GIOCATORE
+   ============================================================ */
+const T = {
+  it: { identity: 'Identità', generate: 'Genera giocatore', first: 'Nome', last: 'Cognome', nat: 'Nazionalità', pickNat: 'Scegli la nazionalità', num: 'Numero', hand: 'Mano preferita', left: 'Sinistra', right: 'Destra', role: 'Ruolo', height: 'Altezza', club: 'Club di partenza', rnd: 'Casuale', pick: 'Scegli tu', diff: 'Difficoltà', normal: 'Normale', hof: 'Hall of Fame', cont: 'Continua', edit: 'Modifica', backTitle: 'Vuoi tornare alla Home?', backText: 'I dati del giocatore che stai creando andranno persi.', backHome: 'Torna alla Home', stay: 'Resta Qua', pickTeam: 'Scegli la squadra del draft', west: 'Conference Ovest', east: 'Conference Est', skin: 'Pelle', hairStyle: 'Capelli', hairColor: 'Colore capelli', kit: 'Maglia', done: 'Fatto', close: 'Chiudi', errName: 'Inserisci nome e cognome.', errNat: 'Scegli la nazionalità.', createdTitle: 'Giocatore creato', age: 'Età', years: 'anni', ovr: 'Overall iniziale', draftTeam: 'Squadra draft', randomTeam: 'Assegnata al draft', nextStep: 'La tua carriera comincia a 16 anni: tra decisioni e stagioni, punta al draft.', startCareer: 'Inizia la carriera', change: 'Cambia',
+        roles: { PG: ['PG', 'Playmaker'], SG: ['SG', 'Guardia'], SF: ['SF', 'Ala piccola'], PF: ['PF', 'Ala grande'], C: ['C', 'Centro'] },
+        hairs: { short: 'Corti', buzz: 'Rasati', afro: 'Afro', braids: 'Treccine', bald: 'Calvo' }, handName: { L: 'Sinistra', R: 'Destra' }, diffName: { normal: 'Normale', hof: 'Hall of Fame' } },
+  en: { identity: 'Identity', generate: 'Generate player', first: 'First name', last: 'Last name', nat: 'Nationality', pickNat: 'Choose nationality', num: 'Number', hand: 'Preferred hand', left: 'Left', right: 'Right', role: 'Position', height: 'Height', club: 'Starting club', rnd: 'Random', pick: 'You pick', diff: 'Difficulty', normal: 'Normal', hof: 'Hall of Fame', cont: 'Continue', edit: 'Edit', backTitle: 'Go back to Home?', backText: 'The player you are creating will be lost.', backHome: 'Back to Home', stay: 'Stay Here', pickTeam: 'Choose your draft team', west: 'Western Conference', east: 'Eastern Conference', skin: 'Skin', hairStyle: 'Hair', hairColor: 'Hair color', kit: 'Jersey', done: 'Done', close: 'Close', errName: 'Enter first and last name.', errNat: 'Choose a nationality.', createdTitle: 'Player created', age: 'Age', years: 'years old', ovr: 'Starting overall', draftTeam: 'Draft team', randomTeam: 'Assigned at the draft', nextStep: 'Your career starts at age 16: make decisions, play seasons, aim for the draft.', startCareer: 'Start career', change: 'Change',
+        roles: { PG: ['PG', 'Point Guard'], SG: ['SG', 'Shooting Guard'], SF: ['SF', 'Small Forward'], PF: ['PF', 'Power Forward'], C: ['C', 'Center'] },
+        hairs: { short: 'Short', buzz: 'Buzz', afro: 'Afro', braids: 'Braids', bald: 'Bald' }, handName: { L: 'Left', R: 'Right' }, diffName: { normal: 'Normal', hof: 'Hall of Fame' } }
+};
+const DEFAULT_TEAMS = [
+  ['West', 'Northwest', [['Denver Nuggets', '#FEC524'], ['Minnesota Timberwolves', '#2a7fc0'], ['Oklahoma City Thunder', '#1f9be0'], ['Portland Trail Blazers', '#E03A3E'], ['Utah Jazz', '#F9A01B']]],
+  ['West', 'Pacific', [['Golden State Warriors', '#FFC72C'], ['Los Angeles Clippers', '#C8102E'], ['Los Angeles Lakers', '#FDB927'], ['Phoenix Suns', '#E56020'], ['Sacramento Kings', '#7a4cb0']]],
+  ['West', 'Southwest', [['Dallas Mavericks', '#1a6fc0'], ['Houston Rockets', '#CE1141'], ['Memphis Grizzlies', '#5D76A9'], ['New Orleans Pelicans', '#B4975A'], ['San Antonio Spurs', '#C4CED4']]],
+  ['East', 'Atlantic', [['Boston Celtics', '#1fa65a'], ['Brooklyn Nets', '#9aa0a6'], ['New York Knicks', '#F58426'], ['Philadelphia 76ers', '#2a8ad6'], ['Toronto Raptors', '#CE1141']]],
+  ['East', 'Central', [['Chicago Bulls', '#CE1141'], ['Cleveland Cavaliers', '#b3234f'], ['Detroit Pistons', '#C8102E'], ['Indiana Pacers', '#FDBB30'], ['Milwaukee Bucks', '#2c8a52']]],
+  ['East', 'Southeast', [['Atlanta Hawks', '#E03A3E'], ['Charlotte Hornets', '#1CA3C4'], ['Miami Heat', '#d1224f'], ['Orlando Magic', '#0077C0'], ['Washington Wizards', '#E31837']]]
+];
+const TEAMS = (() => {
+  try {
+    const config = JSON.parse(localStorage.getItem('goat_admin_config') || 'null');
+    if (!config || !Array.isArray(config.teams) || !config.teams.length) return DEFAULT_TEAMS;
+    const groups = new Map();
+    config.teams.forEach(team => {
+      if (!team || !String(team.name || '').trim()) return;
+      const conference = team.conference || 'West';
+      const division = team.division || 'Custom';
+      const key = conference + '|' + division;
+      if (!groups.has(key)) groups.set(key, [conference, division, []]);
+      groups.get(key)[2].push([String(team.name).trim(), team.color || '#9a9ea6']);
+    });
+    return groups.size ? [...groups.values()] : DEFAULT_TEAMS;
+  } catch (_) { return DEFAULT_TEAMS; }
+})();
+const ALL_TEAMS = TEAMS.flatMap(g => g[2].map(t => ({ name: t[0], color: t[1] })));
+const COUNTRIES = ['US','CA','IT','ES','FR','DE','GB','GR','RS','SI','HR','LT','LV','TR','AU','NZ','BR','AR','NG','SN','CM','CD','EG','JP','CN','PH','PL','FI','SE','DK','NL','BE','CH','AT','CZ','ME','BA','MK','GE','IL','UA','DO','PR','MX','CO','VE','JM','BS','HT','ML','SS','AO'];
+const FIRST = ['Marco','Luca','Daniel','Jalen','Nikola','Luka','Marcus','Kenji','Mateo','Andre','Tyrese','Elias','Viktor','Jamal','Leo','Omar','Giorgos','Dario','Isaiah','Theo'];
+const LAST = ['Rossi','Johnson','Williams','Jokic','Morales','Okafor','Petrov','Silva','Bianchi','Brown','Dimitriou','Tanaka','Mbaye','Costa','Novak','Carter','Ferrari','Davis','Ivanov','Moreau'];
+const SKINS = ['#f6d3b3','#e9b98f','#c98c5c','#a8673a','#7a4526','#4a2a17'];
+const HAIRC = ['#17110d','#4a2d1a','#8a5a2b','#c9a24b','#8f8f8f'];
+const JERSEYS = ['#f1f2f4','#101113','#d12e3a','#2a6fdb','#f2b01e','#2fa66a','#7a3fc4','#ff7a1a'];
+const HAIRS = ['short','buzz','afro','braids','bald'];
+const HEIGHT = { PG: [183, 195], SG: [190, 201], SF: [198, 206], PF: [203, 211], C: [208, 220] };
+
+let lang = 'it';
+const state = { first: '', last: '', nat: '', num: 23, hand: 'R', role: 'PG', height: 192, teamMode: 'random', team: null, diff: 'normal', av: { skin: SKINS[1], hair: 'short', hc: HAIRC[0], jersey: JERSEYS[0] } };
+const t = k => T[lang][k];
+
+function lum(hex) { const n = parseInt(hex.slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; }
+function avatarSVG(a, num) {
+  const { skin, hair, hc, jersey } = a, trim = lum(jersey) > 0.55 ? '#111' : '#fff';
+  const cap = `<path d="M43 36 Q42 13 60 13 Q78 13 77 36 Q72 25 60 25 Q48 25 43 36Z" fill="${hc}"/>`;
+  const hairBack = hair === 'afro' ? `<circle cx="60" cy="29" r="25" fill="${hc}"/>` : '';
+  const hairFront = hair === 'short' || hair === 'afro' ? cap : hair === 'buzz' ? `<path d="M43 36 Q42 14 60 14 Q78 14 77 36 Q72 25 60 25 Q48 25 43 36Z" fill="${hc}" opacity=".55"/>` : hair === 'braids' ? cap + `<path d="M44 31v22M49 26v28M71 26v28M76 31v22" stroke="${hc}" stroke-width="3.2" stroke-linecap="round" fill="none"/>` : '';
+  return `<svg viewBox="0 0 120 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar">
+  <ellipse cx="60" cy="248" rx="30" ry="5" fill="#000" opacity=".45"/>
+  ${hairBack}
+  <rect x="47" y="150" width="12" height="84" rx="5" fill="${skin}"/><rect x="61" y="150" width="12" height="84" rx="5" fill="${skin}"/>
+  <rect x="46" y="206" width="14" height="28" rx="4" fill="#fff"/><rect x="60" y="206" width="14" height="28" rx="4" fill="#fff"/>
+  <rect x="44" y="233" width="17" height="9" rx="4" fill="#1b1c1f"/><rect x="59" y="233" width="17" height="9" rx="4" fill="#1b1c1f"/>
+  <rect x="27" y="68" width="13" height="58" rx="6" fill="${skin}"/><rect x="80" y="68" width="13" height="58" rx="6" fill="${skin}"/>
+  <rect x="54" y="50" width="12" height="18" fill="${skin}"/>
+  <path d="M36 68 Q60 58 84 68 L85 128 H35 Z" fill="${jersey}"/>
+  <rect x="27" y="66" width="13" height="16" rx="5" fill="${jersey}"/><rect x="80" y="66" width="13" height="16" rx="5" fill="${jersey}"/>
+  <path d="M34 124 H86 L90 174 H63 L60 152 L57 174 H30 Z" fill="${jersey}"/>
+  <ellipse cx="43.5" cy="38" rx="3" ry="5" fill="${skin}"/><ellipse cx="76.5" cy="38" rx="3" ry="5" fill="${skin}"/>
+  <ellipse cx="60" cy="36" rx="16" ry="19" fill="${skin}"/>
+  <path d="M51 36q3-3 6 0M63 36q3-3 6 0M54 45q6 6 12 0" stroke="#2a1a12" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ${hairFront}
+  <text x="60" y="106" text-anchor="middle" font-size="19" font-weight="800" fill="${trim}" font-family="Arial,sans-serif">${esc(num)}</text></svg>`;
+}
+function renderAvatars() {
+  const s = avatarSVG(state.av, state.num);
+  $('#avatar').innerHTML = s; $('#avatarPreview').innerHTML = s;
+}
+function applyLang() {
+  $$('[data-i18n]').forEach(el => { const v = t(el.dataset.i18n); if (v) el.textContent = v; });
+  $('#idBack').setAttribute('aria-label', t('backTitle'));
+  // ruoli
+  $('#seg-role').innerHTML = Object.entries(t('roles')).map(([k, v]) => `<button data-v="${k}"><span>${v[0]}</span><small>${v[1]}</small></button>`).join('');
+  // nazionalità
+  const dn = new Intl.DisplayNames([lang], { type: 'region' });
+  const opts = COUNTRIES.map(c => [c, dn.of(c)]).sort((a, b) => a[1].localeCompare(b[1], lang));
+  $('#f-nat').innerHTML = `<option value="" disabled hidden>${esc(t('pickNat'))}</option>` + opts.map(o => `<option value="${o[0]}">${esc(o[1])}</option>`).join('');
+  $('#f-nat').value = state.nat;
+  // capelli
+  $('#seg-hair').innerHTML = HAIRS.map(h => `<button data-v="${h}">${esc(T[lang].hairs[h])}</button>`).join('');
+  bindSegs(); refreshSegs(); renderTeamChip(); renderTeamPicker();
+}
+function bindSegs() {
+  $$('.seg[data-key] button').forEach(b => { b.onclick = () => {
+    const key = b.parentElement.dataset.key; state[key] = b.dataset.v;
+    if (key === 'role') { const [lo, hi] = HEIGHT[state.role]; state.height = Math.min(Math.max(state.height, lo), hi); $('#f-h').value = state.height; $('#hval').textContent = state.height + ' cm'; }
+    refreshSegs(); if (key === 'teamMode') { if (state.teamMode === 'pick') openD('team'); renderTeamChip(); }
+  }; });
+  $$('#seg-hair button').forEach(b => { b.onclick = () => { state.av.hair = b.dataset.v; refreshSegs(); renderAvatars(); }; });
+}
+function refreshSegs() {
+  $$('.seg[data-key]').forEach(seg => $$('button', seg).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === String(state[seg.dataset.key]))));
+  $$('#seg-hair button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === state.av.hair));
+}
+function renderSwatches() {
+  const mk = (id, colors, key) => { $(id).innerHTML = colors.map(c => `<button style="background:${c}" data-c="${c}" aria-label="${c}" aria-pressed="${state.av[key] === c}"></button>`).join('');
+    $$(id + ' button').forEach(b => b.addEventListener('click', () => { state.av[key] = b.dataset.c; renderSwatches(); renderAvatars(); })); };
+  mk('#sw-skin', SKINS, 'skin'); mk('#sw-hc', HAIRC, 'hc'); mk('#sw-jersey', JERSEYS, 'jersey');
+}
+function renderTeamChip() {
+  const el = $('#teamChip');
+  if (state.teamMode === 'pick' && state.team) {
+    const tm = ALL_TEAMS.find(x => x.name === state.team);
+    el.innerHTML = `<button class="chip" id="chipBtn"><span class="dot" style="background:${tm.color}"></span>${esc(tm.name)}</button>`;
+    $('#chipBtn').addEventListener('click', () => openD('team'));
+  } else el.innerHTML = '';
+}
+function renderTeamPicker() {
+  const conf = { West: t('west'), East: t('east') };
+  let html = '', last = '';
+  TEAMS.forEach(g => {
+    if (g[0] !== last) { html += `<h3 style="margin:${last ? 26 : 0}px 0 12px">${esc(conf[g[0]])}</h3>`; last = g[0]; }
+    html += `<div class="tg"><h4>${g[1]}</h4><div class="tgrid">${g[2].map(x => `<button class="team" data-team="${esc(x[0])}"><span class="dot" style="background:${x[1]}"></span>${esc(x[0])}</button>`).join('')}</div></div>`;
+  });
+  $('#teamBody').innerHTML = html;
+  $$('#teamBody .team').forEach(b => b.addEventListener('click', () => { state.team = b.dataset.team; state.teamMode = 'pick'; closeD(); refreshSegs(); renderTeamChip(); }));
+}
+hooks.team = () => { if (!state.team) { state.teamMode = 'random'; refreshSegs(); } renderTeamChip(); };
+hooks.created = () => {};
+
+function syncFields() {
+  $('#f-first').value = state.first; $('#f-last').value = state.last; $('#f-nat').value = state.nat;
+  $('#f-num').value = state.num; $('#f-h').value = state.height; $('#hval').textContent = state.height + ' cm';
+  refreshSegs(); renderTeamChip(); renderAvatars();
+}
+function randomPlayer() {
+  state.first = pick(FIRST); state.last = pick(LAST); state.nat = pick(COUNTRIES);
+  state.num = rnd(0, 99); state.hand = Math.random() < .86 ? 'R' : 'L'; state.role = pick(Object.keys(HEIGHT));
+  const [lo, hi] = HEIGHT[state.role]; state.height = rnd(lo, hi);
+  state.av = { skin: pick(SKINS), hair: pick(HAIRS), hc: pick(HAIRC), jersey: state.av.jersey };
+  syncFields(); $('#idErr').textContent = '';
+}
+$('#f-first').addEventListener('input', e => { state.first = e.target.value; });
+$('#f-last').addEventListener('input', e => { state.last = e.target.value; });
+$('#f-nat').addEventListener('change', e => { state.nat = e.target.value; });
+$('#f-num').addEventListener('input', e => {
+  let v = e.target.value; if (v !== '') { v = Math.max(0, Math.min(99, parseInt(v, 10) || 0)); e.target.value = v; state.num = v; } renderAvatars();
+});
+$('#f-h').addEventListener('input', e => { state.height = +e.target.value; $('#hval').textContent = state.height + ' cm'; });
+$('#idRandom').addEventListener('click', randomPlayer);
+$('#editAvatar').addEventListener('click', () => openD('edit'));
+$('#idBack').addEventListener('click', () => openD('confirm'));
+$('#cfStay').addEventListener('click', closeD);
+$('#cfHome').addEventListener('click', closeAll);
+$('#crClose').addEventListener('click', () => startCareer());
+
+$('#start').addEventListener('click', () => openD('lang'));
+$$('[data-lang]').forEach(b => b.addEventListener('click', () => { lang = b.dataset.lang; document.documentElement.lang = lang; applyLang(); syncFields(); swapD('identity'); }));
+
+$('#idContinue').addEventListener('click', () => {
+  const err = $('#idErr');
+  if (!state.first.trim() || !state.last.trim()) return void (err.textContent = t('errName'));
+  if (!state.nat) return void (err.textContent = t('errNat'));
+  err.textContent = '';
+  if (state.num === '' || isNaN(state.num)) state.num = 0;
+  const team = state.teamMode === 'pick' && state.team ? state.team : null;
+  const ovr = state.diff === 'hof' ? rnd(50, 60) : rnd(58, 68);
+  const dn = new Intl.DisplayNames([lang], { type: 'region' });
+  const draft = { first: state.first.trim(), last: state.last.trim(), nat: state.nat, num: state.num, hand: state.hand, role: state.role, height: state.height, team, diff: state.diff, age: 16, ovr, av: state.av };
+  store.set('goat_draft', draft);
+  $('#crAvatar').innerHTML = avatarSVG(state.av, state.num);
+  const roleName = T[lang].roles[state.role][1];
+  $('#crInfo').innerHTML = `
+    <dt></dt><dd style="font-size:19px">${esc(draft.first)} ${esc(draft.last)}</dd>
+    <dt>${t('age')}</dt><dd>16 ${t('years')}</dd>
+    <dt>${t('role')}</dt><dd>${esc(roleName)} · #${draft.num}</dd>
+    <dt>${t('nat')}</dt><dd>${esc(dn.of(draft.nat))}</dd>
+    <dt>${t('hand')}</dt><dd>${T[lang].handName[draft.hand]} · ${draft.height} cm</dd>
+    <dt>${t('draftTeam')}</dt><dd>${team ? esc(team) : t('randomTeam')}</dd>
+    <dt>${t('diff')}</dt><dd>${T[lang].diffName[draft.diff]}</dd>
+    <dt>${t('ovr')}</dt><dd>${ovr}</dd>`;
+  openD('created');
+});
+
+/* ============================================================
+   RENDERERS e AVVIO
+   ============================================================ */
+const renderers = { obiettivi: renderAch, amici: renderFriends, archivio: renderArchive, login: renderLogin, edit: renderSwatches };
+/* ============================================================
+   MODALITÀ CARRIERA
+   ============================================================ */
+const TCONF = {}; TEAMS.forEach(g => g[2].forEach(x => TCONF[x[0]] = g[0]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const r1 = v => Math.round(v * 10) / 10;
+const money = m => '$' + (m >= 100 ? Math.round(m) : r1(m)) + 'M';
+const LOCKED = new Set(['event', 'report', 'draft', 'offers', 'final', 'retired']);
+let C = store.get('goat_career', null), cTab = 'ov', pendAch = [];
+const save = () => store.set('goat_career', C);
+const teamColor = n => { const x = ALL_TEAMS.find(t => t.name === n); return x ? x.color : '#9a9ea6'; };
+const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k]);
+
+const TC = {
+  it: { home: '‹ Home', ovr: 'Overall', age: 'Età', yrs: 'anni', fame: 'Popolarità', contract: 'Contratto', academy: 'Accademia giovanile', free: 'Nessun contratto', salary: 'Stipendio', role: 'Ruolo nel team',
+    tabOv: 'Panoramica', tabSe: 'Stagioni', tabTr: 'Bacheca', pts: 'Punti', ast: 'Assist', reb: 'Rimbalzi', stl: 'Rubate', blk: 'Stoppate', gp: 'Partite', path: 'Percorso (16 → 40 anni)', last: 'Ultima stagione',
+    noSeasons: 'Nessuna stagione giocata. Avanza per iniziare la carriera.', cAge: 'Età', cTeam: 'Squadra', cRec: 'V-S', cRes: 'Playoff', earned: 'Guadagni totali',
+    goEvent: 'Prendi la decisione', goAdv: 'Avanza di {n} anni', goAdv1: 'Avanza di 1 anno', goDraft: 'Vai al Draft', goOffers: 'Vedi le offerte', goFinal: 'Decidi il futuro',
+    hEvent: 'Decide la tua carriera: scegli con attenzione.', hAdv: 'Dall\'età {a} all\'età {b}.', hDraft: 'La notte del Draft ti aspetta.', hOffers: 'Le squadre si sono fatte avanti.', hFinal: 'Hai compiuto 40 anni.',
+    event: 'Decisione', cont: 'Continua', good: 'Andata bene!', bad: 'Non è andata come speravi.', noEffect: 'Nessun effetto',
+    good1: ['Scelta azzeccata.', 'È andata proprio come speravi.', 'Hai fatto la mossa giusta.'], bad1: ['Il rischio non ha pagato.', 'Qualcosa è andato storto.', 'Non è stata la scelta migliore.'],
+    report: 'Report', youthYear: 'Stagione giovanile', repOvr: 'Overall', unlocked: 'Obiettivi sbloccati',
+    draftTitle: 'Draft NBA', draftPick: 'Scelta numero {p}', draftBy: 'Ti chiamano i {t}.', rookie: 'Contratto rookie: {n} anni · {s} l\'anno', signGo: 'Firma e continua',
+    offersTitle: 'Offerte di contratto', renew: 'Rinnovo', sign: 'Firma', per: 'l\'anno', finalTitle: 'Compiuti 40 anni', finalText: 'Puoi ritirarti subito oppure firmare un ultimo contratto di 1 anno e ritirarti a 41 anni.', retireNow: 'Ritirati ora', lastDance: 'Firma l\'ultimo contratto',
+    retiredTitle: 'Carriera conclusa', retiredAt: 'Ti ritiri a {a} anni.', seasons: 'Stagioni', totalPts: 'Punti totali', backHome: 'Torna alla Home', exitTitle: 'Tornare alla Home?', exitText: 'La carriera è salvata: puoi riprenderla da "Continua carriera".', stay: 'Resta Qua', resume: 'Continua carriera',
+    roles: { star: 'Stella', starter: 'Titolare', rotation: 'Rotazione', bench: 'Panchina' },
+    res: ['Fuori dai playoff', 'Eliminati al 1° turno', 'Eliminati al 2° turno', 'Eliminati in finale di Conference', 'Sconfitti in finale NBA', 'Campioni NBA'],
+    aw: { champ: 'Campione NBA', roy: 'Rookie dell\'anno', sixth: 'Sesto uomo', allstar: 'All-Star', allnba: 'All-NBA First Team', mvp: 'MVP', fmvp: 'MVP Finali', dpoy: 'Difensore dell\'anno', scorer: 'Capocannoniere' },
+    tr: { titles: 'Titoli NBA', mvp: 'MVP', fmvp: 'MVP Finali', allstar: 'All-Star', allnba: 'All-NBA', dpoy: 'Difensore dell\'anno', roy: 'Rookie dell\'anno', scorer: 'Capocannoniere', sixth: 'Sesto uomo', playoffs: 'Playoff', finals: 'Finali NBA' } },
+  en: { home: '‹ Home', ovr: 'Overall', age: 'Age', yrs: 'years', fame: 'Popularity', contract: 'Contract', academy: 'Youth academy', free: 'No contract', salary: 'Salary', role: 'Team role',
+    tabOv: 'Overview', tabSe: 'Seasons', tabTr: 'Trophies', pts: 'Points', ast: 'Assists', reb: 'Rebounds', stl: 'Steals', blk: 'Blocks', gp: 'Games', path: 'Path (age 16 → 40)', last: 'Last season',
+    noSeasons: 'No seasons played yet. Advance to start your career.', cAge: 'Age', cTeam: 'Team', cRec: 'W-L', cRes: 'Playoffs', earned: 'Total earnings',
+    goEvent: 'Make your decision', goAdv: 'Advance {n} years', goAdv1: 'Advance 1 year', goDraft: 'Go to the Draft', goOffers: 'See the offers', goFinal: 'Decide your future',
+    hEvent: 'This shapes your career: choose carefully.', hAdv: 'From age {a} to age {b}.', hDraft: 'Draft night is waiting.', hOffers: 'Teams have come knocking.', hFinal: 'You just turned 40.',
+    event: 'Decision', cont: 'Continue', good: 'It worked out!', bad: 'It did not go as hoped.', noEffect: 'No effect',
+    good1: ['Spot-on choice.', 'Exactly as you hoped.', 'You made the right move.'], bad1: ['The risk did not pay off.', 'Something went wrong.', 'Not the best choice.'],
+    report: 'Report', youthYear: 'Youth season', repOvr: 'Overall', unlocked: 'Achievements unlocked',
+    draftTitle: 'NBA Draft', draftPick: 'Pick number {p}', draftBy: 'The {t} call your name.', rookie: 'Rookie contract: {n} years · {s} a year', signGo: 'Sign and continue',
+    offersTitle: 'Contract offers', renew: 'Renewal', sign: 'Sign', per: 'a year', finalTitle: 'You turned 40', finalText: 'You can retire now, or sign one last 1-year contract and retire at 41.', retireNow: 'Retire now', lastDance: 'Sign the last contract',
+    retiredTitle: 'Career over', retiredAt: 'You retire at age {a}.', seasons: 'Seasons', totalPts: 'Total points', backHome: 'Back to Home', exitTitle: 'Go back to Home?', exitText: 'Your career is saved: pick it up from "Continue career".', stay: 'Stay Here', resume: 'Continue career',
+    roles: { star: 'Star', starter: 'Starter', rotation: 'Rotation', bench: 'Bench' },
+    res: ['Missed the playoffs', 'Out in the 1st round', 'Out in the 2nd round', 'Lost the Conference finals', 'Lost the NBA Finals', 'NBA Champions'],
+    aw: { champ: 'NBA Champion', roy: 'Rookie of the Year', sixth: 'Sixth Man', allstar: 'All-Star', allnba: 'All-NBA First Team', mvp: 'MVP', fmvp: 'Finals MVP', dpoy: 'Defensive Player', scorer: 'Scoring Leader' },
+    tr: { titles: 'NBA Titles', mvp: 'MVP', fmvp: 'Finals MVP', allstar: 'All-Star', allnba: 'All-NBA', dpoy: 'Defensive Player', roy: 'Rookie of the Year', scorer: 'Scoring Leader', sixth: 'Sixth Man', playoffs: 'Playoffs', finals: 'NBA Finals' } }
+};
+const ct = k => TC[C ? C.lang : lang][k];
+
+/* ---------- Decisioni ---------- */
+const E = (id, a, t, d, ch) => ({ id, a, t: { it: t[0], en: t[1] }, d: { it: d[0], en: d[1] }, ch: ch.map(c => ({ l: { it: c[0], en: c[1] }, p: c[2], g: c[3], b: c[4] })) });
+const EVENTS = [
+  E('xtra', [16, 40], ['Allenamento extra', 'Extra training'], ['Il coach propone sessioni aggiuntive dopo gli allenamenti.', 'Your coach offers extra sessions after practice.'], [
+    ['Accetta tutte le sessioni', 'Take every session', .65, [2, 0], [-2, 0]], ['Solo un paio a settimana', 'Just a couple a week', .85, [1, 0], [0, 0]], ['Riposa e recupera', 'Rest and recover', .9, [0, 1], [-1, 0]]]),
+  E('scout', [16, 17], ['Uno scout in tribuna', 'A scout in the stands'], ['Uno scout NBA è venuto a vederti giocare.', 'An NBA scout came to watch you play.'], [
+    ['Prendi ogni tiro', 'Take every shot', .5, [2, 3], [-1, -2]], ['Gioca di squadra', 'Play as a team', .8, [1, 2], [0, 0]], ['Gioca tranquillo', 'Play it safe', .9, [0, 1], [0, -1]]]),
+  E('exam', [16, 17], ['Esami o torneo', 'Exams or tournament'], ['Hai gli esami nella stessa settimana di un torneo decisivo.', 'Your exams fall in the same week as a key tournament.'], [
+    ['Studia', 'Study', .9, [1, 0], [0, 0]], ['Gioca il torneo', 'Play the tournament', .55, [3, 1], [-1, -1]], ['Cerca un equilibrio', 'Find a balance', .75, [1, 1], [0, 0]]]),
+  E('mentor', [16, 26], ['Un veterano ti offre aiuto', 'A veteran offers help'], ['Un giocatore esperto vuole farti da mentore.', 'An experienced player wants to mentor you.'], [
+    ['Accetta volentieri', 'Gladly accept', .85, [2, 0], [0, 0]], ['Impara da solo', 'Learn on your own', .6, [2, 1], [-1, 0]], ['Rifiuta con garbo', 'Politely decline', .9, [0, 0], [0, -1]]]),
+  E('summer', [18, 34], ['Come passi l\'estate?', 'How do you spend the summer?'], ['La stagione è finita e hai tre mesi davanti.', 'The season is over and you have three months ahead.'], [
+    ['Camp con le stelle', 'Camp with the stars', .6, [3, 1], [-1, 0]], ['Tornei di strada', 'Streetball tournaments', .7, [1, 3], [0, -1]], ['Vacanza', 'Vacation', .95, [0, 1], [-1, 0]]]),
+  E('sponsor', [18, 36], ['Offerta di uno sponsor', 'Sponsor offer'], ['Un marchio di scarpe vuole fare di te il suo volto.', 'A shoe brand wants you as its face.'], [
+    ['Firma subito', 'Sign right away', .6, [0, 4], [-1, -2]], ['Negozia le condizioni', 'Negotiate the terms', .5, [0, 6], [0, -1]], ['Rifiuta e resta concentrato', 'Decline and stay focused', .9, [1, 0], [0, 0]]]),
+  E('social', [18, 40], ['Il tuo post diventa virale', 'Your post goes viral'], ['Un tuo messaggio sui social sta facendo discutere.', 'One of your social posts is causing a stir.'], [
+    ['Chiedi scusa', 'Apologize', .8, [0, 1], [0, -2]], ['Ignora il caso', 'Ignore it', .6, [0, 0], [0, -4]], ['Rispondi a tono', 'Fire back', .4, [0, 5], [-1, -5]]]),
+  E('coach', [18, 40], ['Scontro col coach', 'Clash with the coach'], ['L\'allenatore vuole cambiarti ruolo in campo.', 'The coach wants to change your role on the court.'], [
+    ['Accetta il cambio', 'Accept the change', .7, [2, 0], [-1, 0]], ['Chiedi spiegazioni', 'Ask for an explanation', .65, [1, 1], [0, -1]], ['Rifiuta', 'Refuse', .35, [1, 2], [-2, -3]]]),
+  E('injury', [18, 40], ['Un fastidio alla caviglia', 'A sore ankle'], ['Senti dolore prima di una partita importante.', 'You feel pain before an important game.'], [
+    ['Gioca stringendo i denti', 'Play through it', .4, [0, 3], [-3, 0]], ['Fermati due settimane', 'Sit out two weeks', .9, [0, 0], [-1, 0]], ['Fisioterapia specialistica', 'Specialist physio', .75, [1, 0], [0, 0]]]),
+  E('diet', [16, 40], ['Piano nutrizionale', 'Nutrition plan'], ['Un nutrizionista ti propone un piano su misura.', 'A nutritionist offers you a custom plan.'], [
+    ['Segui il piano', 'Follow the plan', .8, [1, 0], [-1, 0]], ['Fai di testa tua', 'Do your own thing', .5, [1, 0], [-2, 0]], ['Ignora', 'Ignore it', .9, [0, 0], [-1, 0]]]),
+  E('mate', [20, 40], ['Un compagno in difficoltà', 'A teammate in trouble'], ['Un compagno ha un problema fuori dal campo.', 'A teammate has trouble off the court.'], [
+    ['Aiutalo di persona', 'Help him personally', .7, [0, 3], [-1, 0]], ['Parlane al coach', 'Tell the coach', .7, [1, 0], [0, -1]], ['Non farti coinvolgere', 'Stay out of it', .9, [0, 0], [0, -1]]]),
+  E('rival', [20, 38], ['Sfida di una star rivale', 'A rival star calls you out'], ['Una star avversaria ti sfida in conferenza stampa.', 'A rival star challenges you at a press conference.'], [
+    ['Rispondi in campo', 'Answer on the court', .55, [2, 3], [-2, -2]], ['Rispondi con classe', 'Reply with class', .8, [0, 3], [0, -1]], ['Ignora', 'Ignore it', .9, [0, 0], [0, -1]]]),
+  E('title', [22, 40], ['Titolo a portata di mano', 'Title within reach'], ['La squadra è vicina all\'anello e ti chiede un sacrificio.', 'Your team is close to a title and asks for a sacrifice.'], [
+    ['Accetta un ruolo minore', 'Accept a smaller role', .8, [0, 3], [0, 0]], ['Pretendi più spazio', 'Demand more minutes', .45, [2, 1], [-1, -3]], ['Resta com\'è', 'Keep things as they are', .9, [0, 0], [0, 0]]]),
+  E('veteran', [32, 40], ['Il fisico presenta il conto', 'Your body sends the bill'], ['A questa età recuperare è più difficile.', 'Recovering gets harder at this age.'], [
+    ['Programma intensivo', 'Intense program', .5, [2, 0], [-3, 0]], ['Gestisci i carichi', 'Manage your load', .85, [1, 0], [0, 0]], ['Continua come sempre', 'Carry on as usual', .5, [0, 0], [-2, 0]]])
+];
+const EV = id => EVENTS.find(e => e.id === id);
+function pickEvent(c) {
+  let pool = EVENTS.filter(e => c.age >= e.a[0] && c.age <= e.a[1]);
+  const fresh = pool.filter(e => !c.seen.includes(e.id)); if (fresh.length) pool = fresh;
+  const e = pick(pool); c.seen.push(e.id); if (c.seen.length > 7) c.seen.shift(); return e.id;
+}
+
+/* ---------- Obiettivi ---------- */
+function A(title) {
+  const done = new Set(store.get('goat_ach', []));
+  for (let ci = 0; ci < ACH.length; ci++) {
+    const ai = ACH[ci][1].findIndex(a => a[0] === title);
+    if (ai >= 0) { const id = ci + '-' + ai; if (!done.has(id)) { done.add(id); store.set('goat_ach', [...done]); pendAch.push(title); } return; }
+  }
+}
+function checkOvr(c) { [[70, 'Overall 70'], [80, 'Overall 80'], [90, 'Overall 90'], [99, 'Overall 99']].forEach(([n, t]) => { if (c.ovr >= n) A(t); }); }
+function checkAch(c, s) {
+  const T_ = c.tot, has = k => s.aw.includes(k);
+  if (T_.pts > 0) A('Primo canestro');
+  if (s.ppg >= 10) A('Doppia cifra'); if (s.ppg >= 20) A('Ventello'); if (s.ppg >= 30) A('Fenomeno dei 30'); if (has('scorer')) A('Capocannoniere'); if (s.hi >= 50) A('Partita da 50');
+  [[1000, 'Quota 1.000'], [10000, 'Quota 10.000'], [25000, 'Quota 25.000'], [40000, 'Oltre ogni record']].forEach(([n, t]) => { if (T_.pts >= n) A(t); });
+  if (T_.ast > 0) A('Primo passaggio vincente'); if (s.apg >= 5) A('Regista'); if (s.apg >= 8) A('Playmaker puro'); if (s.apg >= 9.5 && Math.random() < .6) A('Re degli assist');
+  if (s.ppg >= 15 && s.apg >= 6 && s.rpg >= 6 && Math.random() < .5) A('Tripla doppia'); if (s.apg >= 8.5 && Math.random() < .4) A('Partita da 15 assist');
+  if (T_.ast >= 5000) A('Quota 5.000 assist'); if (T_.ast >= 10000) A('Quota 10.000 assist');
+  if (T_.reb > 0) A('Primo rimbalzo'); if (s.rpg >= 8) A('Sotto canestro'); if (s.rpg >= 12) A('Dominatore dell\'area'); if (s.rpg >= 12.5 && Math.random() < .6) A('Re dei rimbalzi');
+  if (s.rpg >= 11 && Math.random() < .4) A('Partita da 20 rimbalzi'); if (s.ppg >= 10 && s.rpg >= 10) A('Doppia doppia di media'); if (T_.reb >= 5000) A('Quota 5.000 rimbalzi'); if (T_.reb >= 10000) A('Quota 10.000 rimbalzi');
+  if (T_.stl > 0) A('Prima rubata'); if (s.spg >= 2) A('Mani veloci'); if (T_.blk > 0) A('Prima stoppata'); if (s.bpg >= 2) A('Protettore del ferro'); if (has('dpoy')) A('Difensore dell\'anno');
+  if (s.bpg >= 2.6 && Math.random() < .35) A('Partita da 10 stoppate'); if (T_.stl >= 1500) A('Quota 1.500 rubate'); if (T_.blk >= 1000) A('Quota 1.000 stoppate');
+  if (has('roy')) A('Rookie dell\'anno'); if (has('sixth')) A('Sesto uomo dell\'anno'); if (has('allstar')) A('Primo All-Star'); if (has('allnba')) A('All-NBA First Team'); if (has('mvp')) A('MVP di stagione'); if (has('fmvp')) A('MVP delle Finali');
+  [[1, 'Primo anello'], [3, 'Tre anelli'], [5, 'Cinque anelli'], [7, 'Sette anelli']].forEach(([n, t]) => { if (c.tr.titles >= n) A(t); });
+  if (s.result >= 1) A('Primo playoff'); if (s.result >= 2) A('Secondo turno'); if (s.result >= 3) A('Finale di Conference'); if (s.result >= 4) A('Finali NBA'); if (s.comeback) A('Rimonta impossibile');
+  if (s.w >= 60) A('Stagione da 60 vittorie'); if (s.w >= 70) A('Stagione da 70 vittorie'); if (c.titleStreak >= 2) A('Back-to-back'); if (c.titleStreak >= 3) A('Three-peat');
+  checkOvr(c); if (c.streak >= 10) A('Uomo franchigia');
+}
+function updChal(c, s) {
+  const x = c.chal;
+  if (s.result === 5 && c.draftInfo && c.team === c.draftInfo.team) x[0] = 1;
+  if (s.ppg >= 25) x[1]++; if (s.apg >= 9) x[2]++; if (s.aw.includes('dpoy')) x[3]++;
+  x[4] = Math.max(x[4], c.streak); if (s.result === 5 && c.prevPct !== null && c.prevPct < .4) x[5]++;
+  const g = store.get('goat_chal', {}); x.forEach((v, i) => { g[i] = Math.max(g[i] || 0, v); }); store.set('goat_chal', g);
+}
+
+/* ---------- Simulazione ---------- */
+const BASE = { pts: { PG: 25, SG: 28, SF: 27, PF: 25, C: 24 }, ast: { PG: 10, SG: 5.5, SF: 5.5, PF: 4.5, C: 3.5 }, reb: { PG: 4.5, SG: 5, SF: 8, PF: 11, C: 13 }, stl: { PG: 2, SG: 1.8, SF: 1.6, PF: 1.3, C: 1 }, blk: { PG: .4, SG: .5, SF: 1, PF: 1.6, C: 2.6 } };
+function roleOf(ovr, S) { const r = ovr - S; return r >= 8 ? 'star' : r >= 0 ? 'starter' : r >= -8 ? 'rotation' : 'bench'; }
+function develop(c) {
+  const a = c.age; let d;
+  if (a <= 17) d = rnd(3, 6); else if (a <= 20) d = rnd(2, 5); else if (a <= 24) d = rnd(1, 3); else if (a <= 28) d = rnd(-1, 1); else if (a <= 32) d = rnd(-2, 0); else if (a <= 36) d = rnd(-2, -1); else d = rnd(-3, -1);
+  if (d > 0) { if (c.diff === 'hof') d = Math.max(0, Math.round(d * .7)); d = Math.min(d, Math.max(0, c.pot - c.ovr)); }
+  c.ovr = clamp(c.ovr + d, 40, 99); return d;
+}
+function proSeason(c) {
+  const d = develop(c), L = c.league;
+  L.forEach(t => { t.S = clamp(t.S + rnd(-4, 4), 35, 85); });
+  const mine = L.find(t => t.name === c.team), role = roleOf(c.ovr, mine.S);
+  const rf = { star: 1, starter: .8, rotation: .58, bench: .35 }[role];
+  const raw = L.map(t => t === mine ? t.S + (c.ovr - 65) * .55 * rf : t.S), avg = raw.reduce((x, y) => x + y, 0) / raw.length;
+  const rows = L.map((t, i) => ({ t, S: raw[i], w: clamp(Math.round(41 + (raw[i] - avg) * 1.15 + rnd(-6, 6)), 14, 70) }));
+  const me = rows.find(x => x.t === mine);
+  const conf = rows.filter(x => x.t.conf === mine.conf).sort((a, b) => b.w - a.w), rank = conf.indexOf(me) + 1;
+  let result = 0, comeback = false;
+  if (rank <= 8) {
+    const others = conf.filter(x => x !== me), oConf = rows.filter(x => x.t.conf !== mine.conf).sort((a, b) => b.w - a.w);
+    const oppS = [conf[8 - rank].S, others[rnd(0, 2)].S, others[0].S, oConf[0].S];
+    result = 1;
+    for (let r = 0; r < 4; r++) { const p = clamp(.5 + (me.S - oppS[r]) * .014, .07, .93); if (Math.random() < p) { if (p < .35 && Math.random() < .25) comeback = true; result++; } else break; }
+  }
+  const usage = clamp((c.ovr - 45) / 50, .05, 1) * { star: 1, starter: .85, rotation: .65, bench: .4 }[role], noise = () => .88 + Math.random() * .24, P = c.role;
+  const ppg = r1(usage * BASE.pts[P] * noise()), apg = r1(usage * BASE.ast[P] * noise()), rpg = r1(usage * BASE.reb[P] * noise()), spg = r1(usage * BASE.stl[P] * noise()), bpg = r1(usage * BASE.blk[P] * noise());
+  const gp = 82 - (Math.random() < .35 ? rnd(3, 20) : rnd(0, 3)), w = me.w, aw = [], o = c.ovr, champ = result === 5;
+  if (champ) aw.push('champ');
+  if (c.proYears === 0 && o >= 62 && Math.random() < Math.min(.65, (o - 60) * .05)) aw.push('roy');
+  if ((role === 'bench' || role === 'rotation') && o >= 64 && o <= 78 && Math.random() < .1) aw.push('sixth');
+  if (o >= 76 && Math.random() < Math.min(.95, (o - 74) * .08 + .15)) aw.push('allstar');
+  if (o >= 84 && Math.random() < Math.min(.9, (o - 82) * .08)) aw.push('allnba');
+  if (o >= 86 && w >= 50 && Math.random() < Math.min(.65, (o - 85) * .07 + (w - 50) * .01)) aw.push('mvp');
+  if (champ && o >= 78 && Math.random() < .75) aw.push('fmvp');
+  if ((spg >= 1.5 || bpg >= 1.5) && o >= 80 && Math.random() < Math.min(.6, (o - 78) * .03 + .08)) aw.push('dpoy');
+  if (ppg >= 27 && Math.random() < Math.min(.9, .4 + (ppg - 27) * .08)) aw.push('scorer');
+  const s = { age: c.age, team: c.team, w, l: 82 - w, ppg, apg, rpg, spg, bpg, gp, result, comeback, aw, ovr: c.ovr, d, hi: Math.round(ppg * (1.7 + Math.random() * .9)) };
+  c.tot.pts += ppg * gp; c.tot.ast += apg * gp; c.tot.reb += rpg * gp; c.tot.stl += spg * gp; c.tot.blk += bpg * gp; c.tot.gp += gp;
+  if (champ) { c.tr.titles++; c.titleStreak++; } else c.titleStreak = 0;
+  ['mvp', 'fmvp', 'allstar', 'allnba', 'dpoy', 'roy', 'scorer', 'sixth'].forEach(k => { if (aw.includes(k)) c.tr[k]++; });
+  if (result >= 1) c.tr.playoffs++; if (result >= 4) c.tr.finals++;
+  c.streak = c.lastTeam === c.team ? c.streak + 1 : 1; c.lastTeam = c.team;
+  checkAch(c, s); updChal(c, s);
+  c.prevPct = w / 82; c.proYears++; c.age++; c.seasons.push(s);
+  c.money += c.contract.salary;
+  return s;
+}
+const baseSalary = c => clamp(1.1 + Math.pow(Math.max(0, c.ovr - 52), 1.2) * .45, 1.1, 58) * (1 + c.fame / 400);
+function genOffers(c) {
+  const maxY = Math.min(4, 40 - c.age), n = clamp(1 + Math.round((c.ovr - 55) / 8), 2, 4);
+  const others = c.league.filter(t => t.name !== c.team).sort(() => Math.random() - .5).slice(0, n - 1);
+  return [c.league.find(t => t.name === c.team), ...others].map((t, i) => {
+    const years = rnd(1, maxY), sal = r1(clamp(baseSalary(c) * (.85 + Math.random() * .35), 1.1, 58));
+    return { team: t.name, years, salary: sal, role: roleOf(c.ovr, t.S), renew: i === 0 };
+  });
+}
+
+/* ---------- Creazione carriera ---------- */
+function newCareer(d) {
+  return { lang, first: d.first, last: d.last, nat: d.nat, num: d.num, hand: d.hand, role: d.role, height: d.height, diff: d.diff, av: d.av, draftChoice: d.team,
+    age: 16, ovr: d.ovr, pot: d.diff === 'hof' ? rnd(70, 90) : rnd(74, 96), fame: 5, team: null, teams: [], contract: null, period: 'youth', stage: 'event', pending: 1, event: null,
+    seasons: [], tot: { pts: 0, ast: 0, reb: 0, stl: 0, blk: 0, gp: 0 }, tr: { titles: 0, mvp: 0, fmvp: 0, allstar: 0, allnba: 0, dpoy: 0, roy: 0, scorer: 0, sixth: 0, playoffs: 0, finals: 0 },
+    league: ALL_TEAMS.map(t => ({ name: t.name, conf: TCONF[t.name], S: rnd(45, 80) })), proYears: 0, streak: 0, lastTeam: null, titleStreak: 0, prevPct: null, seen: [], chal: [0, 0, 0, 0, 0, 0],
+    offers: null, draftInfo: null, money: 0, lastDance: false, result: null };
+}
+function startCareer() {
+  const d = store.get('goat_draft', null); if (!d) return;
+  C = newCareer(d); C.event = pickEvent(C); pendAch = []; A('Il primo giorno'); save();
+  closeAll(); showCareer(); renderHub(); setTimeout(openEvent, 350);
+}
+
+/* ---------- Pagina ---------- */
+function showCareer() { $('#home').style.display = 'none'; $('#career').style.display = 'flex'; }
+function hideCareer() { $('#career').style.display = 'none'; $('#home').style.display = 'flex'; updateResume(); }
+function updateResume() { const b = $('#resumeBtn'); b.hidden = !C; if (C) b.textContent = TC[C.lang].resume + ' · ' + C.first + ' ' + C.last; }
+function setD(id, title, html) { $('#h-' + id).textContent = title; $('#b-' + id).innerHTML = html; }
+const onc = (sel, fn) => $$(sel).forEach(b => b.addEventListener('click', () => fn(b)));
+
+function ctaInfo() {
+  const c = C, T_ = TC[c.lang];
+  if (c.stage === 'event') return [T_.goEvent, T_.hEvent, openEvent];
+  if (c.stage === 'advance') { const n = c.period === 'youth' ? 2 : c.contract.years; return [n === 1 ? T_.goAdv1 : fill(T_.goAdv, { n }), fill(T_.hAdv, { a: c.age, b: c.age + n }), doAdvance]; }
+  if (c.stage === 'draft') return [T_.goDraft, T_.hDraft, openDraft];
+  if (c.stage === 'offers') return [T_.goOffers, T_.hOffers, openOffers];
+  if (c.stage === 'final') return [T_.goFinal, T_.hFinal, openFinal];
+  return ['', '', () => retire()];
+}
+function renderHub() {
+  const c = C, T_ = TC[c.lang], av = { ...c.av }; if (c.team) av.jersey = teamColor(c.team);
+  const last = c.seasons[c.seasons.length - 1], dn = new Intl.DisplayNames([c.lang], { type: 'region' });
+  const circ = 2 * Math.PI * 44, roleName = T_ === TC.it ? T_ : T_;
+  const posName = T[c.lang].roles[c.role][1];
+  const ct_ = c.contract ? `${money(c.contract.salary)} · ${c.contract.years} ${T_.yrs}` : T_.free;
+  const roleNow = c.contract && c.team ? T_.roles[roleOf(c.ovr, c.league.find(t => t.name === c.team).S)] : '—';
+  const left = `<div class="pcard">
+    <div>${avatarSVG(av, c.num).replace('<svg ', '<svg class="av" ')}</div>
+    <h2>${esc(c.first)} ${esc(c.last)}</h2>
+    <p class="meta">${esc(posName)} · #${c.num} · ${esc(dn.of(c.nat))}<br>${T_.age} ${c.age} · ${c.height} cm</p>
+    <svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#26282c" stroke-width="7"/><circle cx="50" cy="50" r="44" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${circ * c.ovr / 100} ${circ}" transform="rotate(-90 50 50)"/><text x="50" y="55" text-anchor="middle" font-size="30" font-weight="800" fill="#f2f3f5" font-family="Arial,sans-serif">${c.ovr}</text><text x="50" y="70" text-anchor="middle" font-size="9" fill="#9a9ea6" font-family="Arial,sans-serif">${T_.ovr}</text></svg>
+    <div class="kvrow"><span>${T_.contract}</span><b>${esc(c.team ? c.team : T_.academy)}</b></div>
+    <div class="kvrow"><span>${T_.salary}</span><b>${ct_}</b></div>
+    <div class="kvrow"><span>${T_.role}</span><b>${roleNow}</b></div>
+    <div class="kvrow"><span>${T_.fame}</span><b>${c.fame}/100</b></div></div>`;
+  const tabs = [['ov', T_.tabOv], ['se', T_.tabSe], ['tr', T_.tabTr]].map(x => `<button class="tab" data-tab="${x[0]}" aria-selected="${cTab === x[0]}">${x[1]}</button>`).join('');
+  let panel = '';
+  if (cTab === 'ov') {
+    const g = c.tot.gp || 1, tile = (v, l) => `<div class="tile"><b>${Number(Math.round(v)).toLocaleString(c.lang === 'it' ? 'it-IT' : 'en-US')}</b><span>${l}</span></div>`;
+    panel = `<div class="tiles">${tile(c.tot.pts, T_.pts)}${tile(c.tot.ast, T_.ast)}${tile(c.tot.reb, T_.reb)}${tile(c.tot.stl, T_.stl)}${tile(c.tot.blk, T_.blk)}${tile(c.tot.gp, T_.gp)}</div>
+      <p class="lbl">${T_.path}</p><div class="tl"><i style="width:${clamp((c.age - 16) / 24 * 100, 0, 100)}%"></i></div><p class="muted small-text" style="margin:0 0 20px">${T_.age} ${c.age}</p>
+      <p class="lbl">${T_.last}</p>` + (last ? `<div class="rep" style="border:0"><h4>${esc(last.team)} · ${last.w}-${last.l}</h4><p>${last.ppg} PPG · ${last.apg} APG · ${last.rpg} RPG<br>${T_.res[last.result]}</p>${last.aw.map(k => `<span class="chip2 gold">${T_.aw[k]}</span>`).join('')}</div>` : `<p class="muted">${T_.noSeasons}</p>`);
+  } else if (cTab === 'se') {
+    panel = c.seasons.length ? `<div class="tw"><table class="stbl"><thead><tr><th>${T_.cAge}</th><th>${T_.cTeam}</th><th>${T_.cRec}</th><th>PPG</th><th>APG</th><th>RPG</th><th>${T_.ovr}</th><th>${T_.cRes}</th></tr></thead><tbody>` +
+      c.seasons.slice().reverse().map(s => `<tr><td>${s.age}</td><td>${esc(s.team)}</td><td>${s.w}-${s.l}</td><td>${s.ppg}</td><td>${s.apg}</td><td>${s.rpg}</td><td>${s.ovr}</td><td>${T_.res[s.result]}${s.aw.length ? '<br>' + s.aw.map(k => `<span class="chip2 gold">${T_.aw[k]}</span>`).join('') : ''}</td></tr>`).join('') + '</tbody></table></div>' : `<p class="muted">${T_.noSeasons}</p>`;
+  } else {
+    const keys = ['titles', 'mvp', 'fmvp', 'allstar', 'allnba', 'dpoy', 'roy', 'scorer', 'sixth', 'finals', 'playoffs'];
+    panel = `<div class="tiles">${keys.map(k => `<div class="tile"><b>${c.tr[k]}</b><span>${T_.tr[k]}</span></div>`).join('')}<div class="tile"><b>${money(c.money)}</b><span>${T_.earned}</span></div></div>`;
+  }
+  $('#cMain').innerHTML = left + `<div class="panel"><div class="ctabs">${tabs}</div>${panel}</div>`;
+  onc('#cMain [data-tab]', b => { cTab = b.dataset.tab; renderHub(); });
+  $('#cHome').textContent = T_.home; $('#cMoney').textContent = money(c.money);
+  const [label, hint, fn] = ctaInfo(); $('#cGo').textContent = label; $('#cHint').textContent = hint; $('#cGo').onclick = fn;
+  $('#cGo').style.visibility = label ? 'visible' : 'hidden';
+}
+$('#cHome').addEventListener('click', () => { if (!C) return hideCareer(); const T_ = TC[C.lang];
+  setD('exit', T_.exitTitle, `<p class="muted" style="margin:0">${T_.exitText}</p><div class="btnrow"><button class="btn-primary" id="exHome">${T_.backHome}</button><button class="btn-ghost" id="exStay">${T_.stay}</button></div>`);
+  openD('exit'); $('#exHome').onclick = () => { closeAll(); hideCareer(); }; $('#exStay').onclick = closeD; });
+
+/* ---------- Decisioni ---------- */
+function openEvent() {
+  const c = C, L = c.lang, e = EV(c.event);
+  setD('event', TC[L].event, `<p class="muted small-text" style="margin:0 0 6px">${TC[L].age} ${c.age}${c.team ? ' · ' + esc(c.team) : ''}</p><h3 style="margin:0 0 6px;font-size:22px">${esc(e.t[L])}</h3><p style="margin:0 0 18px;line-height:1.5">${esc(e.d[L])}</p>` +
+    e.ch.map((x, i) => `<button class="choice" data-i="${i}">${esc(x.l[L])}</button>`).join(''));
+  openD('event'); onc('#b-event .choice', b => answerEvent(+b.dataset.i));
+}
+function answerEvent(i) {
+  const c = C, L = c.lang, ch = EV(c.event).ch[i], p = Math.max(.1, ch.p - (c.diff === 'hof' ? .1 : 0)), good = Math.random() < p, [dO, dF] = good ? ch.g : ch.b;
+  c.ovr = clamp(c.ovr + dO, 40, 99); c.fame = clamp(c.fame + dF, 0, 100); checkOvr(c);
+  const chip = (v, l) => v ? `<span class="chip2 ${v > 0 ? 'up' : 'down'}">${v > 0 ? '+' : ''}${v} ${l}</span>` : '';
+  const chips = chip(dO, TC[L].ovr) + chip(dF, TC[L].fame) || `<span class="chip2">${TC[L].noEffect}</span>`;
+  c.pending--; c.stage = c.pending > 0 ? 'event' : 'advance'; if (c.pending > 0) c.event = pickEvent(c); save();
+  setD('event', good ? TC[L].good : TC[L].bad, `<p style="font-size:19px;line-height:1.4;margin:0 0 8px">${pick(good ? TC[L].good1 : TC[L].bad1)}</p><div>${chips}</div><button class="btn-primary" id="evNext" style="margin-top:22px">${TC[L].cont}</button>`);
+  $('#evNext').onclick = () => { closeD(); renderHub(); if (c.stage === 'event') setTimeout(openEvent, 350); };
+  renderHub();
+}
+
+/* ---------- Avanzamento ---------- */
+function doAdvance() {
+  const c = C, before = c.ovr, rows = []; pendAch = [];
+  if (c.period === 'youth') {
+    for (let i = 0; i < 2; i++) { const d = develop(c); rows.push({ youth: true, age: c.age, d }); c.age++; }
+    checkOvr(c); c.stage = 'draft';
+    const pickNo = clamp(Math.round(1 + (78 - c.ovr) * 1.9 + rnd(-3, 5)), 1, 60);
+    c.draftInfo = { pick: pickNo, team: c.draftChoice || pick(ALL_TEAMS).name };
+    if (pickNo === 1) A('Prima scelta assoluta'); if (pickNo <= 5) A('Lottery pick');
+  } else {
+    for (let i = 0; i < c.contract.years; i++) rows.push(proSeason(c));
+    if (c.age >= 40) A('Carriera completa');
+    c.stage = c.lastDance ? 'retire' : c.age >= 40 ? 'final' : 'offers'; if (c.stage === 'offers') c.offers = genOffers(c);
+  }
+  save(); renderHub(); openReport(rows, before);
+}
+function openReport(rows, before) {
+  const c = C, L = c.lang, T_ = TC[L];
+  const body = rows.map(s => s.youth ? `<div class="rep"><h4>${T_.youthYear} · ${T_.age} ${s.age}</h4><p>${T_.ovr} ${s.d > 0 ? '+' : ''}${s.d}</p></div>` :
+    `<div class="rep"><h4>${T_.age} ${s.age} · ${esc(s.team)} · ${s.w}-${s.l}</h4><p>${s.ppg} PPG · ${s.apg} APG · ${s.rpg} RPG · ${s.spg} SPG · ${s.bpg} BPG<br>${T_.res[s.result]}</p>${s.aw.map(k => `<span class="chip2 gold">${T_.aw[k]}</span>`).join('')}</div>`).join('');
+  const ach = pendAch.length ? `<h3 style="margin-top:20px">${T_.unlocked}</h3>` + pendAch.map(t => `<span class="chip2 up">✓ ${esc(t)}</span>`).join('') : '';
+  setD('report', T_.report, `<p class="muted" style="margin:0 0 6px">${T_.ovr}</p><div class="big">${before} → ${c.ovr}</div>${body}${ach}<button class="btn-primary" id="repNext" style="margin-top:22px">${T_.cont}</button>`);
+  openD('report');
+  $('#repNext').onclick = () => { closeD(); setTimeout(() => { if (c.stage === 'draft') openDraft(); else if (c.stage === 'offers') openOffers(); else if (c.stage === 'final') openFinal(); else if (c.stage === 'retire') retire(); }, 300); };
+}
+
+/* ---------- Draft ---------- */
+function openDraft() {
+  const c = C, T_ = TC[c.lang], d = c.draftInfo, sal = r1(clamp(11.5 - (d.pick - 1) * .2, 1.1, 12));
+  setD('draft', T_.draftTitle, `<div class="big">${fill(T_.draftPick, { p: d.pick })}</div><p style="font-size:19px;margin:14px 0 6px;line-height:1.4"><span class="dot" style="background:${teamColor(d.team)};margin-right:8px"></span>${fill(T_.draftBy, { t: esc(d.team) })}</p><p class="muted" style="margin:0">${fill(T_.rookie, { n: 2, s: money(sal) })}</p><button class="btn-primary" id="dfGo" style="margin-top:22px">${T_.signGo}</button>`);
+  openD('draft');
+  $('#dfGo').onclick = () => {
+    c.team = d.team; c.teams = [d.team]; c.contract = { years: 2, salary: sal, role: roleOf(c.ovr, c.league.find(t => t.name === d.team).S) };
+    c.period = 'pro'; c.stage = 'event'; c.pending = 1; c.event = pickEvent(c); c.fame = clamp(c.fame + Math.max(0, 8 - Math.floor(d.pick / 6)), 0, 100); save();
+    closeD(); renderHub(); setTimeout(openEvent, 350);
+  };
+}
+
+/* ---------- Offerte ---------- */
+function openOffers() {
+  const c = C, T_ = TC[c.lang];
+  if (!c.offers) { c.offers = genOffers(c); save(); }
+  setD('offers', T_.offersTitle, c.offers.map((o, i) => `<div class="offer"><div class="top"><span class="dot" style="background:${teamColor(o.team)}"></span>${esc(o.team)}${o.renew ? `<span class="chip2" style="margin:0 0 0 auto">${T_.renew}</span>` : ''}</div>
+    <div class="kvrow"><span>${T_.contract}</span><b>${o.years} ${T_.yrs}</b></div><div class="kvrow"><span>${T_.salary}</span><b>${money(o.salary)} ${T_.per}</b></div><div class="kvrow"><span>${T_.role}</span><b>${T_.roles[o.role]}</b></div>
+    <button class="btn-primary" data-o="${i}">${T_.sign}</button></div>`).join(''));
+  openD('offers');
+  onc('#b-offers [data-o]', b => {
+    const o = c.offers[+b.dataset.o]; c.team = o.team; if (!c.teams.includes(o.team)) c.teams.push(o.team);
+    c.contract = { years: o.years, salary: o.salary, role: o.role }; c.offers = null; c.stage = 'event'; c.pending = Math.ceil(o.years / 2); c.event = pickEvent(c);
+    if (o.salary >= 50) A('Contratto massimo'); if (c.teams.length >= 3) A('Giramondo'); pendAch = []; save(); closeD(); renderHub(); setTimeout(openEvent, 350);
+  });
+}
+
+/* ---------- 40 anni e ritiro ---------- */
+function openFinal() {
+  const c = C, T_ = TC[c.lang];
+  setD('final', T_.finalTitle, `<p class="muted" style="margin:0;line-height:1.5">${T_.finalText}</p><div class="btnrow"><button class="btn-primary" id="fnLast">${T_.lastDance}</button><button class="btn-ghost" id="fnRet">${T_.retireNow}</button></div>`);
+  openD('final');
+  $('#fnLast').onclick = () => { c.lastDance = true; c.contract = { years: 1, salary: r1(clamp(baseSalary(c) * .8, 1.1, 40)), role: c.contract.role }; c.period = 'pro'; c.stage = 'advance'; c.pending = 0; save(); closeD(); renderHub(); };
+  $('#fnRet').onclick = () => { closeD(); retire(); };
+}
+function retire() {
+  const c = C, T_ = TC[c.lang]; pendAch = [];
+  if (c.lastDance) A('L\'ultimo ballo'); if (c.age >= 40) A('Carriera completa'); if (c.diff === 'hof') A('Leggenda Hall of Fame');
+  if (c.streak >= 8 && (c.tr.titles >= 1 || c.tr.allstar >= 3)) A('Maglia ritirata');
+  const arch = store.get('goat_archive', []); arch.push({ name: c.first, surname: c.last, team: c.team, overall: c.ovr, seasons: c.proYears, points: Math.round(c.tot.pts) }); store.set('goat_archive', arch);
+  const tile = (v, l) => `<div class="tile"><b>${Number(v).toLocaleString(c.lang === 'it' ? 'it-IT' : 'en-US')}</b><span>${l}</span></div>`;
+  setD('retired', T_.retiredTitle, `<h3 style="margin:0 0 4px;font-size:24px">${esc(c.first)} ${esc(c.last)}</h3><p class="muted" style="margin:0 0 18px">${fill(T_.retiredAt, { a: c.age })} ${esc(c.team || '')}</p>
+    <div class="tiles">${tile(c.ovr, T_.ovr)}${tile(c.proYears, T_.seasons)}${tile(Math.round(c.tot.pts), T_.totalPts)}${tile(c.tr.titles, T_.tr.titles)}${tile(c.tr.mvp, 'MVP')}${tile(c.tr.allstar, 'All-Star')}</div>` +
+    (pendAch.length ? `<h3>${T_.unlocked}</h3>` + pendAch.map(t => `<span class="chip2 up">✓ ${esc(t)}</span>`).join('') : '') + `<button class="btn-primary" id="rtHome" style="margin-top:22px">${T_.backHome}</button>`);
+  C.stage = 'done'; C = null; store.set('goat_career', null);
+  openD('retired'); $('#rtHome').onclick = () => { closeAll(); hideCareer(); };
+}
+
+/* ---------- Avvio ---------- */
+$('#resumeBtn').addEventListener('click', () => {
+  if (!C) return; showCareer(); renderHub();
+  const s = C.stage; setTimeout(() => { if (s === 'event') openEvent(); else if (s === 'draft') openDraft(); else if (s === 'offers') openOffers(); else if (s === 'final') openFinal(); }, 300);
+});
+updateResume();
+
+applyLang(); syncFields(); updateNav();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(err => console.warn('Offline cache non disponibile:', err));
+  });
+}
+</script>
+</body>
+</html>
