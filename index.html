@@ -36,11 +36,11 @@ a{color:var(--text)}
 /* ---------- DRAWERS ---------- */
 #scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s}
 #scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;left:50%;width:min(560px,calc(100vw - 20px));max-height:calc(100dvh - 20px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-top:0;border-radius:0 0 22px 22px;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:translate(-50%,-110%);visibility:hidden;transition:transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s .38s}
-.drawer.open{transform:translate(-50%,0);visibility:visible;transition:transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s}
-.drawer.tall{height:min(800px,calc(100dvh - 20px))}
+.drawer{position:fixed;top:50%;left:50%;width:min(560px,calc(100vw - 20px));max-height:calc(100dvh - 28px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:translate(-50%,-46%) scale(.96);opacity:0;visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility 0s .32s}
+.drawer.open{transform:translate(-50%,-50%) scale(1);opacity:1;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility 0s}
+.drawer.tall{height:min(800px,calc(100dvh - 28px))}
 .drawer.small{width:min(440px,calc(100vw - 20px))}
-.drawer>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px 14px;border-bottom:1px solid var(--line-soft)}
+.drawer>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px 14px;border-bottom:1px solid var(--line-soft);background:linear-gradient(135deg,#17191d,#101113);border-radius:22px 22px 0 0}
 .drawer h2{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em}
 .drawer .body{padding:18px 24px 24px;overflow:auto;flex:1;overscroll-behavior:contain}
 .drawer>footer{padding:14px 24px 20px;background:#111214;border-top:1px solid var(--line-soft);border-radius:0 0 22px 22px}
@@ -182,6 +182,20 @@ h3:first-child{margin-top:0}
 .rep h4{margin:0 0 4px;font-size:17px}
 .rep p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
 .big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+
+/* MyCareer 2.0: editor build e accessori */
+.buildbox{background:linear-gradient(145deg,#17191d,#101113);border:1px solid var(--line);border-radius:16px;padding:16px;margin:18px 0}
+.buildhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.buildhead strong{font-size:20px}.buildhead b{font-size:24px;color:var(--accent)}
+.statrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.statrow:last-child{border-bottom:0}.statrow small{display:block;color:var(--muted);font-size:12px}
+.statcontrols{display:flex;align-items:center;gap:10px}.statcontrols button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:#24262b}
+.statcontrols b{min-width:22px;text-align:center}
+.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.custom-grid .field{margin-bottom:14px}
+.preview-stage{background:radial-gradient(ellipse at 50% 25%,#292c32,#101113 70%);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.preview-stage svg{height:220px!important}
+.pillnote{display:inline-block;padding:5px 9px;border-radius:999px;background:#27292e;color:var(--muted);font-size:12px}
 @media (max-width:760px){
   .cwrap{grid-template-columns:1fr}
   .cfoot-in{flex-direction:column;align-items:stretch;gap:10px}
@@ -339,6 +353,9 @@ h3:first-child{margin-top:0}
     </div>
     <div class="field"><span class="lbl" data-i18n="role">Ruolo</span><div class="seg roles" data-key="role" id="seg-role"></div></div>
     <div class="field"><label class="lbl" for="f-h"><span data-i18n="height">Altezza</span>: <b id="hval"></b></label><input type="range" id="f-h" min="170" max="226"></div>
+    <div class="buildbox"><div class="buildhead"><strong>Build iniziale</strong><span><b id="pointsLeft">100</b><small> / 100 crediti</small></span></div>
+      <p class="muted small-text" style="margin:0 0 8px">Distribuisci 100 crediti tra le abilità. La build determina l'overall iniziale.</p><div id="buildStats"></div>
+    </div>
   </div>
   <footer>
     <div class="pair">
@@ -382,6 +399,34 @@ h3:first-child{margin-top:0}
         <span class="lbl" data-i18n="hairColor">Colore capelli</span><div class="sw" id="sw-hc"></div>
         <span class="lbl" data-i18n="kit">Maglia</span><div class="sw" id="sw-jersey" style="margin-bottom:0"></div>
       </div>
+    </div>
+    <div class="buildbox"><div class="buildhead"><strong>Personalizza scarpe</strong><span class="pillnote">Anteprima live</span></div>
+      <div class="custom-grid">
+        <div class="field"><label class="lbl" for="shoeBrand">Brand</label><select id="shoeBrand"><option>Nike</option><option>Adidas</option><option>New Balance</option><option>Jordan</option><option>Li-Ning</option><option>Reebok</option><option>Converse</option></select></div>
+        <div class="field"><label class="lbl" for="shoeHeight">Altezza</label><select id="shoeHeight"><option value="low">Basse</option><option value="mid" selected>Medie</option><option value="high">Alte</option></select></div>
+        <div class="field"><label class="lbl" for="shoeColor">Colore scarpa sinistra</label><input type="color" id="shoeColor" value="#f4f4f5" style="width:100%;height:40px"></div>
+        <div class="field"><label class="lbl" for="shoeColor2">Colore scarpa destra</label><input type="color" id="shoeColor2" value="#f4f4f5" style="width:100%;height:40px"></div>
+      </div>
+      <div class="field"><label class="lbl" for="shoeGraphic">Grafica</label><select id="shoeGraphic"><option value="classic">Classica</option><option value="stripe">Striscia laterale</option><option value="flame">Fulmine</option><option value="custom">Color block</option></select></div>
+    </div>
+    <div class="buildbox"><div class="buildhead"><strong>Look e accessori</strong></div>
+      <div class="custom-grid">
+        <div class="field"><label class="lbl" for="beardStyle">Barba</label><select id="beardStyle"><option value="none">Nessuna</option><option value="goatee">Pizzetto</option><option value="full">Barba</option></select></div>
+        <div class="field"><label class="lbl" for="headband">Fascetta fronte</label><select id="headband"><option value="no">No</option><option value="yes">Sì</option></select></div>
+        <div class="field"><label class="lbl" for="armSleeve">Arm sleeve</label><select id="armSleeve"><option value="none">Nessuna</option><option value="sleeve">Compressione</option></select></div>
+        <div class="field"><label class="lbl" for="armSide">Braccio</label><select id="armSide"><option value="both">Entrambi</option><option value="left">Sinistro</option><option value="right">Destro</option></select></div>
+        <div class="field"><label class="lbl" for="legSleeve">Leg sleeve</label><select id="legSleeve"><option value="none">Nessuna</option><option value="sleeve">Compressione</option></select></div>
+        <div class="field"><label class="lbl" for="legSide">Gamba</label><select id="legSide"><option value="both">Entrambe</option><option value="left">Sinistra</option><option value="right">Destra</option></select></div>
+        <div class="field"><label class="lbl" for="expression">Espressione</label><select id="expression"><option value="normal">Normale</option><option value="happy">Felice</option><option value="angry">Cattivo</option></select></div>
+      </div>
+      <div class="custom-grid">
+        <div class="field"><label class="lbl" for="bandColor">Colore fascetta</label><input type="color" id="bandColor" value="#f4f4f5" style="width:100%;height:40px"></div>
+        <div class="field"><label class="lbl" for="armColor">Colore arm sleeve</label><input type="color" id="armColor" value="#111827" style="width:100%;height:40px"></div>
+        <div class="field"><label class="lbl" for="legColor">Colore leg sleeve</label><input type="color" id="legColor" value="#111827" style="width:100%;height:40px"></div>
+        <div class="field"><label class="lbl" for="undershirtColor">Colore sottomaglia</label><input type="color" id="undershirtColor" value="#111827" style="width:100%;height:40px"></div>
+      </div>
+      <label style="display:flex;gap:10px;align-items:center;margin:8px 0"><input type="checkbox" id="leggings"> Leggings</label>
+      <label style="display:flex;gap:10px;align-items:center;margin:8px 0"><input type="checkbox" id="undershirt"> Sottomaglia / canotta termica</label>
     </div>
   </div>
 </section>
@@ -770,7 +815,27 @@ const HAIRS = ['short','buzz','afro','braids','bald'];
 const HEIGHT = { PG: [183, 195], SG: [190, 201], SF: [198, 206], PF: [203, 211], C: [208, 220] };
 
 let lang = 'it';
-const state = { first: '', last: '', nat: '', num: 23, hand: 'R', role: 'PG', height: 192, teamMode: 'random', team: null, diff: 'normal', av: { skin: SKINS[1], hair: 'short', hc: HAIRC[0], jersey: JERSEYS[0] } };
+const state = { first: '', last: '', nat: '', num: 23, hand: 'R', role: 'PG', height: 192, teamMode: 'random', team: null, diff: 'normal', av: { skin: SKINS[1], hair: 'short', hc: HAIRC[0], jersey: JERSEYS[0], expression:'normal', bandColor:'#f4f4f5', armColor:'#111827', legColor:'#111827', undershirtColor:'#111827' } };
+
+const BUILD_STATS=[['Tiro da 2','two'],['Tiro da 3','three'],['Tiro libero','ft'],['Finalizzazione','finish'],['Palleggio','handle'],['Passaggio','pass'],['Difesa','defense'],['Fisicità e rimbalzi','physical']];
+const build={two:15,three:15,ft:10,finish:15,handle:10,pass:10,defense:10,physical:15};
+const buildTotal=()=>Object.values(build).reduce((a,b)=>a+b,0);
+function renderBuild(){
+ const el=$('#buildStats'); if(!el)return;
+ $('#pointsLeft').textContent=100-buildTotal();
+ el.innerHTML=BUILD_STATS.map(([label,key])=>`<div class="statrow"><div>${label}<small>Valore abilità</small></div><div class="statcontrols"><button type="button" data-stat="${key}" data-delta="-5">−</button><b>${build[key]}</b><button type="button" data-stat="${key}" data-delta="5">+</button></div></div>`).join('');
+ $$('#buildStats button').forEach(b=>b.onclick=()=>{const k=b.dataset.stat,d=+b.dataset.delta;if(d>0&&buildTotal()+d>100)return;if(d<0&&build[k]+d<5)return;build[k]+=d;renderBuild();});
+}
+function syncCustomization(){
+ const a=state.av;
+ a.brand=$('#shoeBrand').value;a.shoeHeight=$('#shoeHeight').value;a.shoeColor=$('#shoeColor').value;a.shoeColor2=$('#shoeColor2').value;
+ a.shoeGraphic=$('#shoeGraphic').value;a.beard=$('#beardStyle').value;a.headband=$('#headband').value==='yes';
+ a.armSleeve=$('#armSleeve').value;a.armSide=$('#armSide').value;a.legSleeve=$('#legSleeve').value;a.legSide=$('#legSide').value;
+ a.leggings=$('#leggings').checked;a.undershirt=$('#undershirt').checked;
+ a.expression=$('#expression').value;a.bandColor=$('#bandColor').value;a.armColor=$('#armColor').value;a.legColor=$('#legColor').value;a.undershirtColor=$('#undershirtColor').value;renderAvatars();
+}
+function bindCustomization(){['shoeBrand','shoeHeight','shoeColor','shoeColor2','shoeGraphic','beardStyle','headband','armSleeve','armSide','legSleeve','legSide','leggings','undershirt','expression','bandColor','armColor','legColor','undershirtColor'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener('input',syncCustomization);});}
+
 const t = k => T[lang][k];
 
 function lum(hex) { const n = parseInt(hex.slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; }
@@ -779,21 +844,37 @@ function avatarSVG(a, num) {
   const cap = `<path d="M43 36 Q42 13 60 13 Q78 13 77 36 Q72 25 60 25 Q48 25 43 36Z" fill="${hc}"/>`;
   const hairBack = hair === 'afro' ? `<circle cx="60" cy="29" r="25" fill="${hc}"/>` : '';
   const hairFront = hair === 'short' || hair === 'afro' ? cap : hair === 'buzz' ? `<path d="M43 36 Q42 14 60 14 Q78 14 77 36 Q72 25 60 25 Q48 25 43 36Z" fill="${hc}" opacity=".55"/>` : hair === 'braids' ? cap + `<path d="M44 31v22M49 26v28M71 26v28M76 31v22" stroke="${hc}" stroke-width="3.2" stroke-linecap="round" fill="none"/>` : '';
-  return `<svg viewBox="0 0 120 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar">
+  a = Object.assign({brand:'Nike',shoeHeight:'mid',shoeColor:'#f4f4f5',shoeColor2:'#f4f4f5',beard:'none',headband:false,armSleeve:'none',armSide:'both',legSleeve:'none',legSide:'both',leggings:false,undershirt:false,expression:'normal',bandColor:'#f4f4f5',armColor:'#111827',legColor:'#111827',undershirtColor:'#111827'}, a);
+  const beard = a.beard === 'none' ? '' : a.beard === 'goatee' ? `<path d="M53 46 Q60 54 67 46 L65 51 Q60 55 55 51Z" fill="${hc}"/>` : `<path d="M45 42 Q47 52 60 54 Q73 52 75 42 L70 50 Q60 58 50 50Z" fill="${hc}"/>`;
+  const band = a.headband ? `<path d="M44 27 Q60 20 76 27" stroke="${a.bandColor||'#f4f4f5'}" stroke-width="5" fill="none"/>` : '';
+  const sleeveL = a.armSleeve!=='none' && (a.armSide==='both'||a.armSide==='left') ? `<rect x="27" y="83" width="13" height="35" rx="5" fill="${a.armColor||'#111827'}"/>` : '';
+  const sleeveR = a.armSleeve!=='none' && (a.armSide==='both'||a.armSide==='right') ? `<rect x="80" y="83" width="13" height="35" rx="5" fill="${a.armColor||'#111827'}"/>` : '';
+  const legL = a.legSleeve!=='none' && (a.legSide==='both'||a.legSide==='left') ? `<rect x="46" y="157" width="13" height="44" rx="4" fill="${a.legColor||'#111827'}"/>` : '';
+  const legR = a.legSleeve!=='none' && (a.legSide==='both'||a.legSide==='right') ? `<rect x="61" y="157" width="13" height="44" rx="4" fill="${a.legColor||'#111827'}"/>` : '';
+  const shoeY = a.shoeHeight === 'high' ? 226 : a.shoeHeight === 'low' ? 235 : 231;
+  const shoes = `<path d="M44 ${shoeY+1} Q52 ${shoeY-3} 60 ${shoeY+2} L60 242 L43 242 Q39 239 44 ${shoeY+1}Z" fill="${a.shoeColor}"/><path d="M60 ${shoeY+2} Q68 ${shoeY-3} 76 ${shoeY+1} Q81 239 77 242 L60 242Z" fill="${a.shoeColor2}"/><path d="M44 238h15M62 238h14" stroke="${a.shoeGraphic==='stripe'?'#111':a.shoeGraphic==='flame'?'#ff6b35':'#777'}" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 120 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar personalizzato">
+  <defs><linearGradient id="skinLight" x1="0" x2="1"><stop stop-color="${skin}"/><stop offset="1" stop-color="${skin}"/></linearGradient></defs>
   <ellipse cx="60" cy="248" rx="30" ry="5" fill="#000" opacity=".45"/>
   ${hairBack}
   <rect x="47" y="150" width="12" height="84" rx="5" fill="${skin}"/><rect x="61" y="150" width="12" height="84" rx="5" fill="${skin}"/>
+  ${legL}${legR}
+  ${a.leggings ? `<path d="M47 155h11v49H47zM62 155h11v49H62z" fill="#17191d"/>` : ''}
   <rect x="46" y="206" width="14" height="28" rx="4" fill="#fff"/><rect x="60" y="206" width="14" height="28" rx="4" fill="#fff"/>
-  <rect x="44" y="233" width="17" height="9" rx="4" fill="#1b1c1f"/><rect x="59" y="233" width="17" height="9" rx="4" fill="#1b1c1f"/>
+  ${shoes}
   <rect x="27" y="68" width="13" height="58" rx="6" fill="${skin}"/><rect x="80" y="68" width="13" height="58" rx="6" fill="${skin}"/>
+  ${a.undershirt ? `<path d="M36 69 Q60 61 84 69 L84 128 H36Z" fill="${a.undershirtColor}"/><path d="M37 72 L29 112 Q28 118 34 120 L42 91 M83 72 L91 112 Q92 118 86 120 L78 91" fill="none" stroke="${a.undershirtColor}" stroke-width="8" stroke-linecap="round"/>` : ''}
+  ${sleeveL}${sleeveR}
   <rect x="54" y="50" width="12" height="18" fill="${skin}"/>
-  <path d="M36 68 Q60 58 84 68 L85 128 H35 Z" fill="${jersey}"/>
-  <rect x="27" y="66" width="13" height="16" rx="5" fill="${jersey}"/><rect x="80" y="66" width="13" height="16" rx="5" fill="${jersey}"/>
+  <!-- Canotta: spalline strette e aperture laterali, senza maniche -->
+  <path d="M43 68 L49 65 L53 75 H67 L71 65 L77 68 L85 80 L82 128 H38 L35 80Z" fill="${jersey}"/>
+  <path d="M35 80 L44 76 L43 98 L37 98Z M85 80 L76 76 L77 98 L83 98Z" fill="${jersey}"/>
+  <path d="M43 68 L49 65 L53 75 H67 L71 65 L77 68" fill="none" stroke="${jersey}" stroke-width="5" stroke-linejoin="round"/>
   <path d="M34 124 H86 L90 174 H63 L60 152 L57 174 H30 Z" fill="${jersey}"/>
   <ellipse cx="43.5" cy="38" rx="3" ry="5" fill="${skin}"/><ellipse cx="76.5" cy="38" rx="3" ry="5" fill="${skin}"/>
   <ellipse cx="60" cy="36" rx="16" ry="19" fill="${skin}"/>
-  <path d="M51 36q3-3 6 0M63 36q3-3 6 0M54 45q6 6 12 0" stroke="#2a1a12" stroke-width="2" fill="none" stroke-linecap="round"/>
-  ${hairFront}
+  ${a.expression==='angry' ? `<path d="M50 32l7 2M70 32l-7 2" stroke="#2a1a12" stroke-width="2.5" stroke-linecap="round"/><path d="M53 46q7-5 14 0" stroke="#2a1a12" stroke-width="2" fill="none" stroke-linecap="round"/>` : a.expression==='happy' ? `<path d="M50 36q3-3 6 0M64 36q3-3 6 0M52 43q8 10 16 0" stroke="#2a1a12" stroke-width="2" fill="none" stroke-linecap="round"/>` : `<path d="M51 36q3-3 6 0M63 36q3-3 6 0M54 45q6 6 12 0" stroke="#2a1a12" stroke-width="2" fill="none" stroke-linecap="round"/>` }
+  ${hairFront}${beard}${band}
   <text x="60" y="106" text-anchor="middle" font-size="19" font-weight="800" fill="${trim}" font-family="Arial,sans-serif">${esc(num)}</text></svg>`;
 }
 function renderAvatars() {
@@ -861,7 +942,7 @@ function randomPlayer() {
   state.first = pick(FIRST); state.last = pick(LAST); state.nat = pick(COUNTRIES);
   state.num = rnd(0, 99); state.hand = Math.random() < .86 ? 'R' : 'L'; state.role = pick(Object.keys(HEIGHT));
   const [lo, hi] = HEIGHT[state.role]; state.height = rnd(lo, hi);
-  state.av = { skin: pick(SKINS), hair: pick(HAIRS), hc: pick(HAIRC), jersey: state.av.jersey };
+  state.av = { ...state.av, skin: pick(SKINS), hair: pick(HAIRS), hc: pick(HAIRC), jersey: state.av.jersey };
   syncFields(); $('#idErr').textContent = '';
 }
 $('#f-first').addEventListener('input', e => { state.first = e.target.value; });
@@ -872,7 +953,15 @@ $('#f-num').addEventListener('input', e => {
 });
 $('#f-h').addEventListener('input', e => { state.height = +e.target.value; $('#hval').textContent = state.height + ' cm'; });
 $('#idRandom').addEventListener('click', randomPlayer);
-$('#editAvatar').addEventListener('click', () => openD('edit'));
+$('#editAvatar').addEventListener('click', () => {
+ const a=state.av;
+ $('#shoeBrand').value=a.brand||'Nike';$('#shoeHeight').value=a.shoeHeight||'mid';$('#shoeColor').value=a.shoeColor||'#f4f4f5';$('#shoeColor2').value=a.shoeColor2||'#f4f4f5';
+ $('#shoeGraphic').value=a.shoeGraphic||'classic';$('#beardStyle').value=a.beard||'none';$('#headband').value=a.headband?'yes':'no';
+ $('#armSleeve').value=a.armSleeve||'none';$('#armSide').value=a.armSide||'both';$('#legSleeve').value=a.legSleeve||'none';$('#legSide').value=a.legSide||'both';
+ $('#leggings').checked=!!a.leggings;$('#undershirt').checked=!!a.undershirt;
+ $('#expression').value=a.expression||'normal';$('#bandColor').value=a.bandColor||'#f4f4f5';$('#armColor').value=a.armColor||'#111827';$('#legColor').value=a.legColor||'#111827';$('#undershirtColor').value=a.undershirtColor||'#111827';
+ openD('edit');renderAvatars();
+});
 $('#idBack').addEventListener('click', () => openD('confirm'));
 $('#cfStay').addEventListener('click', closeD);
 $('#cfHome').addEventListener('click', closeAll);
@@ -888,9 +977,10 @@ $('#idContinue').addEventListener('click', () => {
   err.textContent = '';
   if (state.num === '' || isNaN(state.num)) state.num = 0;
   const team = state.teamMode === 'pick' && state.team ? state.team : null;
-  const ovr = state.diff === 'hof' ? rnd(50, 60) : rnd(58, 68);
+  if(buildTotal()!==100) return void (err.textContent='Devi utilizzare esattamente 100 crediti nella build.');
+  const ovr = clamp(72+(state.diff==='hof'?-3:0),40,72);
   const dn = new Intl.DisplayNames([lang], { type: 'region' });
-  const draft = { first: state.first.trim(), last: state.last.trim(), nat: state.nat, num: state.num, hand: state.hand, role: state.role, height: state.height, team, diff: state.diff, age: 16, ovr, av: state.av };
+  const draft = { first: state.first.trim(), last: state.last.trim(), nat: state.nat, num: state.num, hand: state.hand, role: state.role, height: state.height, team, diff: state.diff, age: 16, ovr, av: state.av, build: {...build} };
   store.set('goat_draft', draft);
   $('#crAvatar').innerHTML = avatarSVG(state.av, state.num);
   const roleName = T[lang].roles[state.role][1];
@@ -1258,7 +1348,7 @@ $('#resumeBtn').addEventListener('click', () => {
 });
 updateResume();
 
-applyLang(); syncFields(); updateNav();
+applyLang(); syncFields(); renderBuild(); bindCustomization(); updateNav();
 </script>
 <script>
 if ('serviceWorker' in navigator) {
